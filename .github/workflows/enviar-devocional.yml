@@ -1,0 +1,30 @@
+name: Enviar devocional diário
+
+on:
+  schedule:
+    - cron: "7 7 * * *"
+      timezone: "America/Campo_Grande"
+  workflow_dispatch:
+
+concurrency:
+  group: envio-devocional-diario
+  cancel-in-progress: false
+
+jobs:
+  enviar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar os arquivos
+        uses: actions/checkout@v4
+
+      - name: Preparar o Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Enviar a palavra do dia
+        env:
+          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
+          ONESIGNAL_API_KEY: ${{ secrets.ONESIGNAL_API_KEY }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+        run: node scripts/enviar-devocional.mjs
