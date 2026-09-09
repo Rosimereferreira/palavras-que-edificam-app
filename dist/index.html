@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#5b1634">
+    <meta name="description" content="Um devocional bíblico novo para começar cada dia com fé.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Palavras">
+    <title>Palavras que Edificam</title>
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" href="./icons/icon-192.png">
+    <link rel="apple-touch-icon" href="./icons/icon-192.png">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./config.js"></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="Palavras que Edificam — início">
+          <span class="brand-mark" aria-hidden="true">PE</span>
+          <span>
+            <strong>Palavras que Edificam</strong>
+            <small>Devocional diário</small>
+          </span>
+        </a>
+        <span class="today-chip">Hoje</span>
+      </header>
+
+      <section class="daily-card" aria-labelledby="devotional-title">
+        <div class="card-glow" aria-hidden="true"></div>
+        <p class="date-label" id="date-label">Carregando a palavra de hoje…</p>
+        <h1 id="devotional-title">Uma palavra para o seu coração</h1>
+        <p class="impact-phrase" id="impact-phrase"></p>
+
+        <blockquote class="verse-card">
+          <span class="verse-mark" aria-hidden="true">“</span>
+          <p id="verse-text"></p>
+          <cite id="verse-reference"></cite>
+        </blockquote>
+
+        <div class="devotional-body">
+          <section>
+            <h2>Reflexão</h2>
+            <p id="reflection-text"></p>
+          </section>
+
+          <section>
+            <h2>Ore comigo</h2>
+            <p id="prayer-text"></p>
+          </section>
+
+          <aside class="daily-step">
+            <span aria-hidden="true">✦</span>
+            <div>
+              <strong>Passo de fé para hoje</strong>
+              <p id="daily-action"></p>
+            </div>
+          </aside>
+        </div>
+
+        <button class="text-button" id="share-button" type="button">
+          <span aria-hidden="true">↗</span>
+          Compartilhar esta palavra
+        </button>
+      </section>
+
+      <section class="action-panel" aria-label="Opções do aplicativo">
+        <div>
+          <p class="action-kicker">Não perca a palavra de amanhã</p>
+          <h2>Leve este devocional com você</h2>
+        </div>
+        <div class="action-buttons">
+          <button class="primary-button" id="notify-button" type="button">
+            <span aria-hidden="true">♡</span>
+            Receber mensagem diária
+          </button>
+          <button class="secondary-button" id="install-button" type="button">
+            <span aria-hidden="true">＋</span>
+            Instalar no celular
+          </button>
+        </div>
+        <p class="status-message" id="status-message" role="status"></p>
+        <small class="consent-note">
+          Ao ativar, você autoriza o envio de uma notificação bíblica por dia. É possível desativar nas configurações do aparelho.
+        </small>
+      </section>
+
+      <footer>
+        <span>Feito para fortalecer a fé, um dia de cada vez.</span>
+      </footer>
+    </main>
+
+    <dialog class="help-dialog" id="install-dialog">
+      <form method="dialog">
+        <button class="dialog-close" value="close" aria-label="Fechar">×</button>
+        <span class="dialog-icon" aria-hidden="true">＋</span>
+        <h2>Instalar no iPhone</h2>
+        <ol>
+          <li>Toque no botão <strong>Compartilhar</strong> do navegador.</li>
+          <li>Escolha <strong>Adicionar à Tela de Início</strong>.</li>
+          <li>Abra o aplicativo pelo novo ícone.</li>
+          <li>Dentro dele, toque em <strong>Receber mensagem diária</strong>.</li>
+        </ol>
+        <button class="primary-button dialog-done" value="close">Entendi</button>
+      </form>
+    </dialog>
+
+    <dialog class="help-dialog" id="setup-dialog">
+      <form method="dialog">
+        <button class="dialog-close" value="close" aria-label="Fechar">×</button>
+        <span class="dialog-icon" aria-hidden="true">♡</span>
+        <h2>O aplicativo está pronto para as notificações</h2>
+        <p>
+          Para ativá-las de verdade, coloque o App ID da sua conta OneSignal no arquivo <strong>config.js</strong>.
+          O passo a passo completo está no arquivo de instruções do projeto.
+        </p>
+        <button class="primary-button dialog-done" value="close">Certo</button>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <noscript>Este aplicativo precisa do JavaScript ativado para mostrar o devocional diário.</noscript>
+  </body>
+</html>
