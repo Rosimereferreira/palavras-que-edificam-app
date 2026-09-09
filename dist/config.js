@@ -3,6 +3,6 @@
  * O App ID pode ficar no site. A App API Key nunca deve ser colocada aqui.
  */
 window.APP_CONFIG = Object.freeze({
-  oneSignalAppId: "COLE_AQUI_O_APP_ID_DO_ONESIGNAL",
+  oneSignalAppId: "336185ce-bb64-4f44-b68e-b43c75d68f18",
   timeZone: "America/Campo_Grande"
 });
