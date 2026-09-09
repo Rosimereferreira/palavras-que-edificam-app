@@ -55,6 +55,7 @@ const payload = {
   app_id: APP_ID,
   target_channel: "push",
   included_segments: [filters: [
+  filters: [
   { field: "session_count", relation: ">", value: "0" }
 ],
   name: "Devocional diário - " + devotional.id,
