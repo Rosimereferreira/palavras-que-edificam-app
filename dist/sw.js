@@ -1,6 +1,6 @@
 "use strict";
 
-var CACHE_NAME = "palavras-que-edificam-v1";
+var CACHE_NAME = "diario-da-fe-digital-v2";
 var APP_FILES = [
   "./",
   "./index.html",
@@ -9,6 +9,7 @@ var APP_FILES = [
   "./config.js",
   "./devocionais.json",
   "./manifest.webmanifest",
+  "./icons/logo-diario-da-fe.svg",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png"
