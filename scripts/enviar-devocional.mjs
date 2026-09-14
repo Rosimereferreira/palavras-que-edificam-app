@@ -59,7 +59,7 @@ const payload = {
   ],
   name: "Devocional diário - " + devotional.id,
   headings: {
-    en: "Palavras que Edificam"
+    en: "Diário da Fé Digital"
   },
   contents: {
     en: devotional.tema + " — " + devotional.frase
