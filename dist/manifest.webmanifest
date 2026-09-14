@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
-  "name": "Palavras que Edificam",
-  "short_name": "Palavras",
-  "description": "Um devocional bíblico novo para começar cada dia com fé.",
+  "name": "Diário da Fé Digital",
+  "short_name": "Diário da Fé",
+  "description": "Devocionais, versículos, orações e mensagens para fortalecer a fé todos os dias.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
