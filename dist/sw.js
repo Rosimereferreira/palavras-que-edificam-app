@@ -1,6 +1,6 @@
 "use strict";
 
-var CACHE_NAME = "diario-da-fe-digital-v4";
+var CACHE_NAME = "diario-da-fe-digital-v5";
 var APP_FILES = [
   "./",
   "./index.html",
@@ -8,6 +8,10 @@ var APP_FILES = [
   "./app.js",
   "./config.js",
   "./devocionais.json",
+  "./series-1.json",
+  "./series-2.json",
+  "./series-3.json",
+  "./series-4.json",
   "./manifest.webmanifest",
   "./icons/logo-diario-da-fe.svg",
   "./icons/logo-diario-da-fe.png",
@@ -46,7 +50,8 @@ self.addEventListener("fetch", function (event) {
   var requestUrl = new URL(event.request.url);
   var preferNetwork = event.request.mode === "navigate" ||
     requestUrl.pathname.endsWith("/config.js") ||
-    requestUrl.pathname.endsWith("/devocionais.json");
+    requestUrl.pathname.endsWith("/devocionais.json") ||
+    requestUrl.pathname.includes("/series-");
 
   if (preferNetwork) {
     event.respondWith(
