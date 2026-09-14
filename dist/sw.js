@@ -1,11 +1,12 @@
 "use strict";
 
-var CACHE_NAME = "diario-da-fe-digital-v5";
+var CACHE_NAME = "diario-da-fe-digital-v6";
 var APP_FILES = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
+  "./annual-devotional.js",
   "./config.js",
   "./devocionais.json",
   "./series-1.json",
@@ -43,13 +44,12 @@ self.addEventListener("activate", function (event) {
 });
 
 self.addEventListener("fetch", function (event) {
-  if (event.request.method !== "GET") {
-    return;
-  }
+  if (event.request.method !== "GET") return;
 
   var requestUrl = new URL(event.request.url);
   var preferNetwork = event.request.mode === "navigate" ||
     requestUrl.pathname.endsWith("/config.js") ||
+    requestUrl.pathname.endsWith("/annual-devotional.js") ||
     requestUrl.pathname.endsWith("/devocionais.json") ||
     requestUrl.pathname.includes("/series-");
 
@@ -58,9 +58,7 @@ self.addEventListener("fetch", function (event) {
       fetch(event.request).then(function (response) {
         if (response && response.ok) {
           var copy = response.clone();
-          caches.open(CACHE_NAME).then(function (cache) {
-            cache.put(event.request, copy);
-          });
+          caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, copy); });
         }
         return response;
       }).catch(function () {
@@ -77,15 +75,11 @@ self.addEventListener("fetch", function (event) {
       var network = fetch(event.request).then(function (response) {
         if (response && response.ok && response.type === "basic") {
           var copy = response.clone();
-          caches.open(CACHE_NAME).then(function (cache) {
-            cache.put(event.request, copy);
-          });
+          caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, copy); });
         }
         return response;
       }).catch(function () {
-        if (event.request.mode === "navigate") {
-          return caches.match("./index.html");
-        }
+        if (event.request.mode === "navigate") return caches.match("./index.html");
         return cached;
       });
       return cached || network;
