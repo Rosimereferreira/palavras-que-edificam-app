@@ -89,7 +89,7 @@
     byId("reflection-text").textContent = devotional.reflexao;
     byId("prayer-text").textContent = devotional.oracao;
     byId("daily-action").textContent = devotional.tarefa;
-    document.title = devotional.tema + " | Palavras que Edificam";
+    document.title = devotional.tema + " | Diário da Fé Digital";
   }
 
   async function loadDevotional() {
@@ -118,7 +118,7 @@
       return;
     }
     var shareText = state.current.tema + "\n“" + state.current.frase + "”\n" +
-      state.current.referencia + "\n\nPalavras que Edificam";
+      state.current.referencia + "\n\nDiário da Fé Digital";
     var shareData = {
       title: state.current.tema,
       text: shareText,
@@ -280,7 +280,7 @@
             }
           },
           welcomeNotification: {
-            title: "Palavras que Edificam",
+            title: "Diário da Fé Digital",
             message: "Pronto! Você receberá uma palavra bíblica todos os dias."
           }
         });
