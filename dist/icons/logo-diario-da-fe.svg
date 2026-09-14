@@ -1,17 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192" role="img" aria-labelledby="title">
-  <title id="title">Logo Diário da Fé Digital</title>
+  <title id="title">DF — Diário da Fé Digital</title>
   <defs>
-    <clipPath id="circle-clip">
-      <circle cx="96" cy="96" r="96" />
-    </clipPath>
+    <radialGradient id="bg" cx="35%" cy="25%" r="85%">
+      <stop offset="0%" stop-color="#7a1d45"/>
+      <stop offset="55%" stop-color="#5b1634"/>
+      <stop offset="100%" stop-color="#2b0b1b"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f6e7bd"/>
+      <stop offset="45%" stop-color="#d7ad63"/>
+      <stop offset="100%" stop-color="#fff2ca"/>
+    </linearGradient>
   </defs>
-  <image
-    href="./logo-diario-da-fe.png"
-    x="0"
-    y="0"
-    width="192"
-    height="192"
-    preserveAspectRatio="xMidYMid slice"
-    clip-path="url(#circle-clip)"
-  />
+  <rect width="192" height="192" rx="40" fill="url(#bg)"/>
+  <circle cx="96" cy="96" r="76" fill="none" stroke="url(#gold)" stroke-width="3.5"/>
+  <text x="96" y="119" text-anchor="middle" fill="#fff4d6" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" letter-spacing="-3">DF</text>
 </svg>
