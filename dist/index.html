@@ -13,6 +13,67 @@
     <link rel="icon" href="./icons/icon-192.png">
     <link rel="apple-touch-icon" href="./icons/icon-192.png">
     <link rel="stylesheet" href="./styles.css">
+    <style>
+      .pastoral-signature {
+        margin-top: 28px;
+        padding: 22px 20px;
+        border: 1px solid #e8c8cf;
+        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(247, 233, 232, 0.72), rgba(255, 250, 244, 0.95));
+        text-align: center;
+      }
+
+      .pastoral-signature .with-love {
+        margin: 0 0 3px;
+        color: #765f67;
+        font-size: 0.88rem;
+      }
+
+      .pastoral-signature .pastor-name {
+        display: block;
+        margin-bottom: 16px;
+        color: #5b1634;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.35rem;
+        font-weight: 700;
+      }
+
+      .pastoral-links {
+        display: grid;
+        gap: 10px;
+      }
+
+      .pastoral-link {
+        display: flex;
+        min-height: 48px;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 11px 15px;
+        border-radius: 14px;
+        text-decoration: none;
+        font-weight: 800;
+      }
+
+      .pastoral-link.instagram {
+        border: 1px solid #e8c8cf;
+        background: #fffaf4;
+        color: #762245;
+      }
+
+      .pastoral-link.whatsapp {
+        border: 1px solid #5b1634;
+        background: #5b1634;
+        color: #fffaf4;
+      }
+
+      .prayer-note {
+        margin: 14px 0 0;
+        color: #765f67;
+        font-size: 0.8rem;
+        line-height: 1.5;
+      }
+    </style>
     <script src="./config.js"></script>
     <script src="./app.js" defer></script>
   </head>
@@ -59,6 +120,34 @@
               <p id="daily-action"></p>
             </div>
           </aside>
+        </div>
+
+        <div class="pastoral-signature" aria-label="Contato da Pastora Rosy">
+          <p class="with-love">Com carinho,</p>
+          <strong class="pastor-name">Pastora Rosy ❤️</strong>
+          <div class="pastoral-links">
+            <a
+              class="pastoral-link instagram"
+              href="https://www.instagram.com/diariodafedigital"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Abrir Instagram Diário da Fé Digital"
+            >
+              <span aria-hidden="true">◎</span>
+              @diariodafedigital
+            </a>
+            <a
+              class="pastoral-link whatsapp"
+              href="https://wa.me/5567991431244?text=Ol%C3%A1%2C%20Pastora%20Rosy.%20Vim%20pelo%20Palavras%20que%20Edificam%20e%20gostaria%20de%20deixar%20um%20pedido%20de%20ora%C3%A7%C3%A3o.%20%F0%9F%99%8F"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Enviar pedido de oração pelo WhatsApp"
+            >
+              <span aria-hidden="true">♡</span>
+              Enviar pedido de oração
+            </a>
+          </div>
+          <p class="prayer-note">Seu pedido será recebido com carinho. Deus conhece cada detalhe da sua história.</p>
         </div>
 
         <button class="text-button" id="share-button" type="button">
