@@ -2,7 +2,9 @@ name: Enviar devocional diário
 
 on:
   schedule:
-    - cron: "7 7 * * *"
+    - cron: "17 20 * * *"
+      timezone: "America/Campo_Grande"
+    - cron: "17 5 * * *"
       timezone: "America/Campo_Grande"
   workflow_dispatch:
 
@@ -13,6 +15,7 @@ concurrency:
 jobs:
   enviar:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Baixar os arquivos
         uses: actions/checkout@v4
@@ -22,7 +25,7 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Enviar a palavra do dia
+      - name: Programar a palavra das 6h
         env:
           ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
           ONESIGNAL_API_KEY: ${{ secrets.ONESIGNAL_API_KEY }}
