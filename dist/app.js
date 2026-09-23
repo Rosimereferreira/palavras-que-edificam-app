@@ -56,48 +56,137 @@
     { frase: "Não guarde apenas a memória do gigante; guarde a memória do Deus que deu a vitória.", reflexao: "Muitas pessoas se lembram com detalhes do medo, mas esquecem rapidamente das respostas de Deus. A fé para batalhas futuras é fortalecida quando fazemos memória da fidelidade passada. Termine esta semana olhando menos para Golias e mais para o Deus que esteve com você em cada passo.", oracao: "Senhor, ajuda-me a guardar no coração as provas da Tua fidelidade. Que minhas memórias alimentem fé e não medo. Amém.", tarefa: "Faça uma lista de cinco situações em que Deus já sustentou, livrou ou direcionou você." }
   ];
 
-  var genericPhrases = [
-    "Uma verdade recebida pela fé pode mudar a forma como você atravessa este dia.",
-    "Deus não perdeu o controle da área da sua vida que hoje mais precisa de cuidado.",
-    "Você não precisa ter todas as respostas para responder a Deus com fé hoje.",
-    "O próximo passo pode ser simples, mas a obediência nunca é pequena nas mãos de Deus.",
-    "A fé cresce quando você troca a pressa de controlar pela coragem de confiar.",
-    "Deus pode usar uma decisão de hoje para iniciar uma mudança muito maior amanhã.",
-    "Guarde esta verdade: Deus continua fiel, mesmo quando o processo ainda não terminou."
+  var seriesCore = {
+    "Amor de Deus": "O amor de Deus não é prêmio por desempenho. Ele nasce do caráter de Deus e foi revelado em Cristo antes que pudéssemos merecê-lo.",
+    "Perdão": "Perdoar não apaga a verdade nem chama a ferida de pequena; é recusar que a dor continue governando o coração.",
+    "Aliança": "Aliança é fidelidade que permanece quando a emoção oscila; é compromisso sustentado por verdade, responsabilidade e presença.",
+    "Fidelidade": "Fidelidade é permanecer inteiro diante de Deus também nas pequenas escolhas que ninguém vê.",
+    "Entrega": "Entregar não é desistir da vida, mas devolver a Deus o lugar de governo que a ansiedade tenta ocupar.",
+    "Fé": "Fé bíblica não ignora a realidade; ela escolhe interpretar a realidade a partir de quem Deus é.",
+    "Oração": "Oração é relacionamento antes de ser pedido: nela o coração se abre, se alinha e aprende a reconhecer a presença de Deus.",
+    "Cura da Alma": "Deus não trata nossas feridas com pressa nem superficialidade; Ele nos encontra na verdade para restaurar o que foi quebrado.",
+    "Identidade em Deus": "Nossa identidade mais profunda não nasce de rótulos, aprovação ou rejeição, mas do que Deus declara sobre nós em Cristo.",
+    "Coragem": "Coragem não é ausência de medo; é não entregar ao medo o direito de decidir por nós.",
+    "Espera": "Esperar em Deus não é ficar parada; é amadurecer sem forçar portas que ainda não foram abertas.",
+    "Propósito": "Propósito não começa no palco, mas na fidelidade ao que Deus colocou diante de nós hoje.",
+    "Família": "A fé dentro de casa é construída em palavras, perdão, presença e escolhas repetidas de amor.",
+    "Casamento e Relacionamentos": "Relacionamentos saudáveis exigem graça e verdade caminhando juntas; amor sem verdade adoece, e verdade sem amor fere.",
+    "Amizades e Comunhão": "Deus também nos sustenta por meio de vínculos seguros, maduros e capazes de nos aproximar da verdade.",
+    "Sabedoria": "Sabedoria é mais do que saber muito; é discernir o que honra a Deus antes de agir.",
+    "Paz": "A paz de Deus não depende de um cenário perfeito; ela nasce de um coração governado pela presença de Cristo.",
+    "Ansiedade e Descanso": "Descansar em Deus não elimina responsabilidades, mas impede que o peso delas ocupe o lugar da confiança.",
+    "Gratidão": "Gratidão não nega o que falta; ela se recusa a esquecer o que Deus já sustentou.",
+    "Obediência": "Obediência é confiança em movimento: fazemos o que Deus mostra mesmo quando ainda não enxergamos todo o caminho.",
+    "Santidade": "Santidade não é aparência religiosa, mas uma vida que aprende a pertencer a Deus também no secreto.",
+    "Graça": "Graça não é permissão para permanecer igual; é o favor de Deus que nos recebe e também nos transforma.",
+    "Misericórdia": "Misericórdia olha a verdade da queda sem reduzir a pessoa ao pior momento de sua história.",
+    "Esperança": "Esperança cristã não é otimismo vazio; é confiança no caráter de Deus quando o final ainda não pode ser visto.",
+    "Perseverança": "Perseverar é continuar fiel sem confundir cansaço com fracasso nem demora com abandono.",
+    "Recomeços": "Em Deus, recomeçar não significa fingir que nada aconteceu, mas permitir que a graça escreva um novo capítulo com verdade.",
+    "Chamado": "O chamado de Deus não depende de perfeição, mas de disponibilidade, formação e fidelidade ao que Ele confiou.",
+    "Liderança Servidora": "Liderança no Reino não é controle; é responsabilidade, exemplo e disposição para servir pessoas sem usá-las.",
+    "Fruto do Espírito": "O fruto do Espírito revela o que Deus está formando por dentro antes de qualquer performance por fora.",
+    "Domínio Próprio": "Domínio próprio é liberdade para não ser governada por impulsos, emoções ou hábitos que nos afastam do que importa.",
+    "Alegria no Senhor": "A alegria do Senhor é uma fonte mais profunda do que o humor do dia; ela pode coexistir com processos difíceis.",
+    "Confiança": "Confiar em Deus é descansar no caráter dEle quando nossas explicações ainda estão incompletas.",
+    "Provisão": "A provisão de Deus nos ensina dependência, responsabilidade e contentamento, não passividade.",
+    "Proteção": "A proteção de Deus não promete ausência de vales, mas presença, direção e cuidado enquanto os atravessamos.",
+    "Direção de Deus": "Deus costuma iluminar o próximo passo antes de mostrar a estrada inteira; direção também exige obediência ao que já ficou claro.",
+    "Palavra de Deus": "A Palavra não foi dada apenas para informar, mas para confrontar, consolar, corrigir e formar nossa maneira de viver.",
+    "Espírito Santo": "O Espírito Santo não é uma ideia distante; Ele consola, ensina, convence, fortalece e conduz a vida de quem se rende a Deus.",
+    "Adoração": "Adoração é oferecer a Deus mais do que uma canção: é colocar escolhas, prioridades e coração diante dEle.",
+    "Serviço": "Servir como Jesus é amar de maneira prática sem transformar entrega em necessidade de aprovação.",
+    "Generosidade": "Generosidade nasce quando entendemos que recebemos de Deus para também nos tornarmos canal de cuidado.",
+    "Humildade": "Humildade não é pensar menos de si, mas não precisar colocar a si mesma no centro de tudo.",
+    "Justiça e Compaixão": "A fé que toca o coração também abre nossos olhos para a dor do outro e nos chama a agir com justiça e compaixão.",
+    "Unidade": "Unidade não exige que todos sejam iguais; exige maturidade para preservar o amor sem abandonar a verdade.",
+    "Batalha Espiritual": "A batalha espiritual é enfrentada com verdade, oração, obediência e a obra de Cristo — não com medo de pessoas.",
+    "Promessas de Deus": "As promessas de Deus devem ser seguradas junto com o caráter de quem prometeu, sem manipular o processo.",
+    "Tempo de Deus": "O tempo de Deus não é desperdício; muitas vezes aquilo que parece demora está formando estrutura para sustentar a resposta.",
+    "Milagres": "Milagres apontam para quem Deus é e nos chamam à fé, mas nunca substituem obediência, processo e gratidão.",
+    "Restauração": "Restauração verdadeira não apenas devolve o que se perdeu; ela trata as rachaduras para que a história não seja reconstruída do mesmo jeito.",
+    "Testemunho": "Um testemunho saudável não engrandece a nossa força, mas revela a fidelidade de Deus no meio de uma história real.",
+    "Missão e Evangelismo": "Missão começa quando a presença de Jesus em nós se transforma em amor, serviço e coragem para compartilhar esperança.",
+    "Eternidade e Presença de Deus": "A eternidade reorganiza nossas prioridades: esta vida importa, mas ela não é o capítulo final da história com Deus."
+  };
+
+  var loveOfGodPhrases = [
+    "Você não precisa provar que merece o amor que Jesus já decidiu demonstrar.",
+    "A luta pode tocar suas circunstâncias, mas não pode arrancar você do amor de Deus.",
+    "Quando você se sabe profundamente amada, o medo perde o direito de governar.",
+    "O amor de Deus não ficou apenas em palavras; ele tomou a forma de entrega.",
+    "Você não ama para ser aceita; você aprende a amar porque primeiro foi alcançada.",
+    "Amor verdadeiro aparece na forma como tratamos pessoas quando seria mais fácil reagir.",
+    "Permanecer no amor de Jesus é fazer da presença dEle a casa do coração."
+  ];
+
+  var loveOfGodReflections = [
+    "Antes de você acertar, melhorar ou conseguir organizar a própria vida, Deus já havia se movido em sua direção. Romanos 5:8 mostra que Cristo morreu por nós quando ainda éramos pecadores. Isso quebra a lógica de que precisamos merecer amor para então sermos recebidas. O amor de Deus não começa na sua performance; começa nEle. O que aprendemos com isso? Você pode parar de viver tentando provar valor diante de Deus e começar a responder, com gratidão e transformação, ao amor que já a alcançou.",
+    "Há dias em que a dor, o silêncio ou uma resposta que não chegou fazem parecer que Deus se afastou. Mas Romanos 8:38–39 não promete uma vida sem luta; afirma que nenhuma luta tem poder para romper o amor de Deus revelado em Cristo. Sentimento de distância não é prova de abandono. O que aprendemos com isso? A circunstância pode mudar, suas emoções podem oscilar, mas o amor de Deus não precisa ser medido pelo dia que você está vivendo. Em Cristo, você continua amada, vista e sustentada.",
+    "O medo sempre tenta antecipar perda, rejeição e punição. Já o amor de Deus nos ensina a descansar no caráter do Pai. 1 João 4:18 mostra que o amor aperfeiçoado lança fora o medo. Isso não significa que nunca sentiremos medo, mas que ele não precisa governar nossas decisões. O que aprendemos com isso? Quanto mais o coração conhece quem Deus é, menos espaço sobra para viver escravizada pelo pior cenário.",
+    "João 3:16 revela que o amor de Deus não ficou no discurso: Ele entregou o Filho. Amor bíblico tem movimento, custo e propósito. Por isso, quando dizemos que amamos, somos chamadas a ultrapassar palavras bonitas e entrar no terreno da presença, do serviço e da entrega. O que aprendemos com isso? O amor que recebemos de Deus nos transforma em pessoas capazes de amar de maneira concreta, inclusive quando isso exige renúncia.",
+    "1 João 4:19 coloca a ordem correta: nós amamos porque Ele nos amou primeiro. Muitas vezes tentamos oferecer aquilo que ainda não aprendemos a receber. Quem vive mendigando aprovação pode transformar amor em cobrança, medo ou dependência. O que aprendemos com isso? Antes de exigir de si mesma a capacidade de amar perfeitamente, deixe o amor de Deus curar suas carências e reorganizar seu coração.",
+    "1 Coríntios 13 tira o amor do campo das intenções e o coloca nas atitudes: paciência, bondade, perseverança e ausência de egoísmo. É fácil falar de amor quando ninguém nos contraria; o caráter aparece quando somos frustradas, cansadas ou feridas. O que aprendemos com isso? Amor não é apenas o que sentimos por alguém, mas a maneira como escolhemos tratá-lo diante de Deus.",
+    "Jesus não disse apenas que nos ama; em João 15:9 Ele nos chama a permanecer nesse amor. Permanecer é fazer morada, voltar, continuar, não viver entrando e saindo da verdade conforme o humor do dia. O que aprendemos com isso? Sua segurança espiritual cresce quando o amor de Cristo deixa de ser uma frase conhecida e passa a ser o lugar onde seus pensamentos, escolhas e identidade descansam."
+  ];
+
+  var genericImpactPhrases = [
+    "A Palavra de hoje não veio apenas para informar você, mas para transformar a forma como você caminha.",
+    "Aquilo que Deus revela ao coração pode mudar a maneira como você interpreta o que está vivendo.",
+    "Uma verdade obedecida vale mais do que muitas verdades apenas admiradas.",
+    "Deus também trabalha profundamente nas decisões que ninguém vê.",
+    "O coração muda quando a verdade de Deus fala mais alto do que o medo.",
+    "Uma resposta sincera a Deus hoje pode mudar o rumo dos próximos passos.",
+    "Não termine esta palavra apenas emocionada; termine decidida a viver o que Deus mostrou."
   ];
 
   function buildGeneric(seriesItem, dayIndex) {
     var day = seriesItem.dias[dayIndex];
     var name = seriesItem.serie;
     var lower = name.toLowerCase();
+    var core = seriesCore[name] || "Deus usa a Sua Palavra para revelar verdade, formar caráter e conduzir nossas escolhas.";
+    var phrase = name === "Amor de Deus" ? loveOfGodPhrases[dayIndex] : genericImpactPhrases[dayIndex];
+
     var reflections = [
-      "A série desta semana nos convida a crescer em " + lower + ". A Palavra de hoje nos lembra: " + day.versiculo + " Não trate isso apenas como uma ideia bonita. Peça ao Espírito Santo para transformar esta verdade em uma escolha prática no seu dia.",
-      "Há áreas da vida que só amadurecem quando permitimos que a Palavra corrija nosso olhar. Hoje, em " + day.tema.toLowerCase() + ", Deus nos chama a sair da reação automática e caminhar com fé. " + day.versiculo + " Leve essa verdade para as decisões pequenas, porque é nelas que o caráter é formado.",
-      "Deus não trabalha apenas no resultado; Ele também trabalha em quem estamos nos tornando durante o caminho. A verdade de " + day.referencia + " nos chama a uma resposta real: " + day.versiculo + " Não espere sentir tudo perfeitamente para obedecer. Dê o passo que já ficou claro.",
-      "Talvez o assunto desta semana toque exatamente uma área que você preferia evitar. Ainda assim, a graça de Deus não expõe para humilhar; ela ilumina para curar e direcionar. " + day.versiculo + " Receba a Palavra com humildade e permita que ela produza mudança.",
-      "Fé não é negar a realidade, mas decidir quem terá a palavra final dentro de nós. Em " + day.referencia + ", somos lembradas de que " + day.versiculo.charAt(0).toLowerCase() + day.versiculo.slice(1) + " Hoje, escolha alimentar convicções que combinam com a Palavra, não com o medo.",
-      "Algumas transformações começam com uma decisão silenciosa que ninguém vê. A Palavra de hoje aponta um caminho de " + lower + ": " + day.versiculo + " Não despreze o que Deus pode construir a partir de uma resposta sincera e obediente.",
-      "Chegamos ao fim desta série semanal, mas a verdade não precisa terminar aqui. " + day.versiculo + " Faça memória do que Deus falou nesses dias e escolha uma prática para continuar levando com você. Crescimento espiritual acontece quando a Palavra deixa de ser apenas ouvida e passa a ser vivida."
+      core + " Em " + day.referencia + ", a Palavra nos mostra: " + day.versiculo + " O tema “" + day.tema + "” nos chama a sair da teoria e permitir que essa verdade alcance a vida real. O que aprendemos com isso? Deus não quer apenas mudar o que você sabe; Ele quer transformar a maneira como você responde ao que está vivendo.",
+      core + " " + day.versiculo + " Há momentos em que as emoções contam uma história diferente da Palavra, e é exatamente aí que a fé precisa criar raízes. “" + day.tema + "” não é uma frase para ignorar a realidade, mas um convite para enxergá-la a partir de Deus. O que aprendemos com isso? Nem tudo o que sentimos deve receber autoridade para definir o que é verdade.",
+      core + " A verdade de " + day.referencia + " nos confronta: " + day.versiculo + " Existe uma diferença entre conhecer um versículo e permitir que ele mude nossas escolhas. O que aprendemos com isso? Crescimento espiritual acontece quando a Palavra encontra uma decisão concreta, especialmente nas áreas em que obedecer custa alguma coisa.",
+      core + " " + day.versiculo + " Deus não ilumina uma área da nossa vida para nos humilhar, mas para nos conduzir à liberdade. A palavra “" + day.tema + "” toca justamente o lugar onde talvez seja mais fácil fugir, justificar ou endurecer. O que aprendemos com isso? Cura e maturidade começam quando paramos de esconder de Deus aquilo que Ele já deseja tratar com graça e verdade.",
+      core + " Em " + day.referencia + ", somos lembradas de que " + day.versiculo.charAt(0).toLowerCase() + day.versiculo.slice(1) + " A fé amadurece quando a verdade deixa de competir com o medo e passa a governar o coração. O que aprendemos com isso? Você não precisa esperar a circunstância mudar para começar a responder de uma maneira nova diante de Deus.",
+      core + " A Palavra diz: " + day.versiculo + " Muitas mudanças profundas começam em silêncio, numa decisão que talvez ninguém perceba. “" + day.tema + "” nos lembra que Deus leva a sério o que fazemos com aquilo que Ele nos mostra. O que aprendemos com isso? Pequenas escolhas alinhadas à verdade podem construir uma vida inteira de maturidade.",
+      core + " " + day.versiculo + " Depois de ouvir essa verdade, a pergunta mais importante não é apenas “o que eu senti?”, mas “o que vou viver?”. O que aprendemos com isso? A Palavra produz fruto quando continua conosco depois da leitura — nas conversas, reações, prioridades e decisões do cotidiano."
     ];
+
     var prayers = [
-      "Senhor, abre meu coração para viver esta verdade. Forma em mim " + lower + " de maneira sincera e prática. Que Tua Palavra conduza minhas escolhas hoje. Amém.",
+      "Senhor, leva esta verdade além da minha mente e planta-a profundamente no meu coração. Forma em mim " + lower + " de maneira sincera e prática. Que Tua Palavra conduza minhas escolhas hoje. Amém.",
       "Pai, mostra onde preciso amadurecer e dá-me graça para responder com fé. Não quero apenas compreender; quero praticar o que o Senhor está me ensinando. Amém.",
       "Deus, alinha meus pensamentos, minhas palavras e minhas atitudes à Tua vontade. Dá-me coragem para obedecer ao que já ficou claro. Amém.",
       "Senhor, toca as áreas que precisam de cura, correção e crescimento. Que eu receba Tua direção sem medo e caminhe em liberdade. Amém.",
       "Pai, quando minhas emoções falarem mais alto, lembra-me da Tua Palavra. Firma meu coração em Ti e ensina-me a confiar. Amém.",
       "Deus, usa minhas escolhas de hoje para formar algo duradouro em mim. Que minha vida reflita a verdade que estou recebendo. Amém.",
-      "Senhor, obrigada pelo que me ensinaste nesta semana. Ajuda-me a guardar, praticar e compartilhar aquilo que veio de Ti. Amém."
+      "Senhor, ajuda-me a guardar e praticar aquilo que veio de Ti. Que esta Palavra continue produzindo fruto depois que eu fechar esta tela. Amém."
     ];
+
     var tasks = [
-      "Leia " + day.referencia + " na sua Bíblia e escreva em uma frase o que Deus falou ao seu coração.",
-      "Ore hoje por uma situação específica ligada a " + lower + " e entregue-a a Deus pelo nome.",
-      "Repita a verdade principal desta palavra em voz alta três vezes e escolha uma atitude coerente com ela.",
-      "Anote uma área em que você precisa praticar " + lower + " e dê um pequeno passo ainda hoje.",
-      "Compartilhe esta palavra com alguém que possa ser fortalecido por ela.",
-      "Reserve cinco minutos em silêncio, releia " + day.referencia + " e pergunte: “Senhor, o que preciso ajustar hoje?”",
-      "Antes de dormir, agradeça a Deus por um sinal, ainda que pequeno, do que Ele está fazendo nesta área."
+      "Leia " + day.referencia + " na sua Bíblia e escreva em uma frase o que essa verdade precisa mudar em você hoje.",
+      "Ore por uma situação específica ligada a " + lower + " e entregue-a a Deus pelo nome.",
+      "Escolha uma atitude concreta que combine com a Palavra de hoje e pratique-a antes do fim do dia.",
+      "Anote a área em que esta palavra mais confrontou você e converse com Deus sobre ela com total sinceridade.",
+      "Quando o medo ou a emoção falar mais alto hoje, releia " + day.referencia + " antes de reagir.",
+      "Separe cinco minutos em silêncio e pergunte: “Senhor, o que preciso colocar em prática a partir desta Palavra?”",
+      "Antes de dormir, relembre a mensagem de hoje e registre uma mudança de pensamento, atitude ou oração que ela produziu."
     ];
-    return { serie: name, tema: day.tema, frase: genericPhrases[dayIndex], referencia: day.referencia, versiculo: day.versiculo, reflexao: reflections[dayIndex], oracao: prayers[dayIndex], tarefa: tasks[dayIndex] };
+
+    return {
+      serie: name,
+      tema: day.tema,
+      frase: phrase,
+      referencia: day.referencia,
+      versiculo: day.versiculo,
+      reflexao: name === "Amor de Deus" ? loveOfGodReflections[dayIndex] : reflections[dayIndex],
+      oracao: prayers[dayIndex],
+      tarefa: tasks[dayIndex]
+    };
   }
 
   function specialDay() {
@@ -199,17 +288,37 @@
     var button = byId("notify-button");
     var status = byId("status-message");
     var subscription = state.oneSignal.User.PushSubscription;
-    if (subscription.optedIn) { button.innerHTML = "<span aria-hidden=\"true\">✓</span> Mensagens ativadas"; status.textContent = "Tudo certo! Você receberá uma palavra bíblica pela manhã."; }
-    else { button.innerHTML = "<span aria-hidden=\"true\">♡</span> Receber mensagem diária"; status.textContent = isIOS() && !isStandalone() ? "No iPhone, instale o aplicativo antes de ativar as mensagens." : "Toque para permitir uma notificação bíblica por dia."; }
+    if (subscription.optedIn) { button.innerHTML = "<span aria-hidden=\"true\">✓</span> Mensagens ativadas"; status.textContent = "Tudo certo! A palavra do dia está programada para chegar às 6h."; }
+    else { button.innerHTML = "<span aria-hidden=\"true\">♡</span> Ativar palavra das 6h"; status.textContent = isIOS() && !isStandalone() ? "No iPhone, instale o aplicativo antes de ativar as mensagens." : "Toque uma vez para autorizar a notificação diária das 6h."; }
     button.disabled = false;
   }
   async function requestNotifications() {
     if (isIOS() && !isStandalone()) { openDialog(byId("install-dialog")); byId("status-message").textContent = "Depois de instalar, abra pelo ícone e ative as mensagens."; return; }
     if (!state.oneSignal) { openDialog(byId("setup-dialog")); return; }
     var button = byId("notify-button"); button.disabled = true; byId("status-message").textContent = "Abrindo a autorização do aparelho…";
-    try { if (!state.oneSignal.Notifications.isPushSupported()) throw new Error("Este navegador não oferece notificações."); await state.oneSignal.User.PushSubscription.optIn(); window.setTimeout(updateNotificationStatus, 600); }
+    try { if (!state.oneSignal.Notifications.isPushSupported()) throw new Error("Este navegador não oferece notificações."); await state.oneSignal.User.PushSubscription.optIn(); showToast("Pronto! A palavra diária das 6h foi ativada."); window.setTimeout(updateNotificationStatus, 600); }
     catch (error) { button.disabled = false; byId("status-message").textContent = error && error.message ? error.message : "Não foi possível ativar agora."; }
   }
+  function maybeOfferDailyNotification() {
+    if (!state.oneSignal || state.oneSignal.User.PushSubscription.optedIn) return;
+    if (isIOS() && !isStandalone()) return;
+    try {
+      if (window.localStorage.getItem("diario-fe-notify-invite-v1") === "shown") return;
+      window.setTimeout(function () {
+        var dialog = byId("notification-dialog");
+        if (dialog && state.oneSignal && !state.oneSignal.User.PushSubscription.optedIn) {
+          openDialog(dialog);
+          window.localStorage.setItem("diario-fe-notify-invite-v1", "shown");
+        }
+      }, 1200);
+    } catch (error) {
+      window.setTimeout(function () {
+        var dialog = byId("notification-dialog");
+        if (dialog && state.oneSignal && !state.oneSignal.User.PushSubscription.optedIn) openDialog(dialog);
+      }, 1200);
+    }
+  }
+
   function setupOneSignal() {
     var appId = String(config.oneSignalAppId || "").trim();
     var button = byId("notify-button");
@@ -223,13 +332,13 @@
         var basePath = new URL(".", window.location.href).pathname; if (basePath.charAt(basePath.length - 1) !== "/") basePath += "/";
         var workerPath = basePath.substring(1) + "push/onesignal/OneSignalSDKWorker.js";
         await OneSignal.init({ appId: appId, serviceWorkerPath: workerPath, serviceWorkerParam: { scope: basePath + "push/onesignal/" }, autoResubscribe: true, persistNotification: false, promptOptions: { slidedown: { prompts: [{ type: "push", autoPrompt: false, text: { actionMessage: "Receba uma palavra bíblica para começar bem cada dia.", acceptButton: "Permitir", cancelButton: "Agora não" } }] } }, welcomeNotification: { title: "Diário da Fé Digital", message: "Pronto! Você receberá uma palavra bíblica todos os dias." } });
-        state.oneSignal = OneSignal; OneSignal.User.PushSubscription.addEventListener("change", updateNotificationStatus); updateNotificationStatus(); button.addEventListener("click", requestNotifications);
+        state.oneSignal = OneSignal; OneSignal.User.PushSubscription.addEventListener("change", updateNotificationStatus); updateNotificationStatus(); maybeOfferDailyNotification(); button.addEventListener("click", requestNotifications);
       } catch (error) { button.disabled = false; byId("status-message").textContent = "Confira o App ID e o endereço configurado no OneSignal."; }
     });
   }
 
   function setupEvents() {
-    byId("share-button").addEventListener("click", shareCurrent); byId("install-button").addEventListener("click", installApp);
+    byId("share-button").addEventListener("click", shareCurrent); byId("install-button").addEventListener("click", installApp); var inviteButton = byId("notification-dialog-button"); if (inviteButton) inviteButton.addEventListener("click", function () { var dialog = byId("notification-dialog"); if (dialog && typeof dialog.close === "function") dialog.close(); requestNotifications(); });
     window.addEventListener("beforeinstallprompt", function (event) { event.preventDefault(); state.deferredInstall = event; });
     window.addEventListener("appinstalled", function () { state.deferredInstall = null; updateInstallButton(); showToast("Aplicativo instalado com sucesso."); });
   }
