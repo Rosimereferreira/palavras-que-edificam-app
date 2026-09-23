@@ -168,13 +168,13 @@
 
       <section class="action-panel" aria-label="Opções do aplicativo">
         <div>
-          <p class="action-kicker">Não perca a palavra de amanhã</p>
+          <p class="action-kicker">Receba a palavra do dia às 6h</p>
           <h2>Leve este devocional com você</h2>
         </div>
         <div class="action-buttons">
           <button class="primary-button" id="notify-button" type="button">
             <span aria-hidden="true">♡</span>
-            Receber mensagem diária
+            Ativar palavra das 6h
           </button>
           <button class="secondary-button" id="install-button" type="button">
             <span aria-hidden="true">＋</span>
@@ -183,7 +183,7 @@
         </div>
         <p class="status-message" id="status-message" role="status"></p>
         <small class="consent-note">
-          Ao ativar, você autoriza o envio de uma notificação bíblica por dia. É possível desativar nas configurações do aparelho.
+          Ao ativar, você autoriza uma notificação bíblica diária programada para as 6h. É possível desativar nas configurações do aparelho.
         </small>
       </section>
 
@@ -204,6 +204,26 @@
           <li>Dentro dele, toque em <strong>Receber mensagem diária</strong>.</li>
         </ol>
         <button class="primary-button dialog-done" value="close">Entendi</button>
+      </form>
+    </dialog>
+
+
+    <dialog class="help-dialog" id="notification-dialog">
+      <form method="dialog">
+        <button class="dialog-close" value="close" aria-label="Fechar">×</button>
+        <span class="dialog-icon" aria-hidden="true">♡</span>
+        <h2>Receber a palavra às 6h</h2>
+        <p>
+          Para o Diário da Fé avisar quando a nova palavra estiver disponível,
+          falta apenas uma autorização do seu celular.
+        </p>
+        <p>
+          Toque em <strong>Ativar notificações</strong> e confirme a permissão.
+          Isso é feito uma única vez.
+        </p>
+        <button class="primary-button dialog-done" id="notification-dialog-button" type="button">
+          Ativar notificações
+        </button>
       </form>
     </dialog>
 
