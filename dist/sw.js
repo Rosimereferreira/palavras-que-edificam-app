@@ -1,11 +1,12 @@
 "use strict";
 
-var CACHE_NAME = "diario-da-fe-digital-v8";
+var CACHE_NAME = "diario-da-fe-digital-v10";
 var APP_FILES = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
+  "./analytics.js",
   "./annual-devotional.js",
   "./config.js",
   "./devocionais.json",
