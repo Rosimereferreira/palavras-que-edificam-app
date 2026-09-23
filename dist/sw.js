@@ -1,6 +1,6 @@
 "use strict";
 
-var CACHE_NAME = "diario-da-fe-digital-v6";
+var CACHE_NAME = "diario-da-fe-digital-v7";
 var APP_FILES = [
   "./",
   "./index.html",
