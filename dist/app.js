@@ -8,6 +8,7 @@
   var state = { devotionals: [], series: [], current: null, renderedDateKey: null, deferredInstall: null, oneSignal: null, toastTimer: null };
 
   function byId(id) { return document.getElementById(id); }
+  function track(name, properties) { if (typeof window.trackDiarioEvent === "function") window.trackDiarioEvent(name, properties || {}); }
   function isIOS() { return /iphone|ipad|ipod/i.test(window.navigator.userAgent); }
   function isStandalone() { return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true; }
   function openDialog(dialog) { if (dialog && typeof dialog.showModal === "function") dialog.showModal(); }
@@ -228,6 +229,7 @@
     byId("prayer-text").textContent = devotional.oracao;
     byId("daily-action").textContent = devotional.tarefa;
     document.title = devotional.tema + " | Diário da Fé Digital";
+    track("devotional_viewed", { devotional_id: devotional.id || "", theme: devotional.tema || "", series: devotional.serie || "", reference: devotional.referencia || "", date_key: state.renderedDateKey || "" });
   }
 
   async function loadLegacyDevotional() {
@@ -263,6 +265,7 @@
 
   async function shareCurrent() {
     if (!state.current) return;
+    track("devotional_share_clicked", { devotional_id: state.current.id || "", theme: state.current.tema || "", series: state.current.serie || "" });
     var shareText = state.current.tema + "\n“" + state.current.frase + "”\n" + state.current.referencia + "\n\nDiário da Fé Digital";
     var shareData = { title: state.current.tema, text: shareText, url: window.location.href.split("#")[0] };
     try {
@@ -277,6 +280,7 @@
     if (isStandalone()) { button.innerHTML = "<span aria-hidden=\"true\">✓</span> Instalado no celular"; button.disabled = true; }
   }
   async function installApp() {
+    track("install_clicked", { standalone: isStandalone(), ios: isIOS() });
     if (isStandalone()) { showToast("O aplicativo já está instalado."); return; }
     if (state.deferredInstall) { state.deferredInstall.prompt(); await state.deferredInstall.userChoice; state.deferredInstall = null; updateInstallButton(); return; }
     if (isIOS()) { openDialog(byId("install-dialog")); return; }
@@ -293,10 +297,11 @@
     button.disabled = false;
   }
   async function requestNotifications() {
+    track("notification_permission_requested", { standalone: isStandalone(), ios: isIOS() });
     if (isIOS() && !isStandalone()) { openDialog(byId("install-dialog")); byId("status-message").textContent = "Depois de instalar, abra pelo ícone e ative as mensagens."; return; }
     if (!state.oneSignal) { openDialog(byId("setup-dialog")); return; }
     var button = byId("notify-button"); button.disabled = true; byId("status-message").textContent = "Abrindo a autorização do aparelho…";
-    try { if (!state.oneSignal.Notifications.isPushSupported()) throw new Error("Este navegador não oferece notificações."); await state.oneSignal.User.PushSubscription.optIn(); showToast("Pronto! A palavra diária das 6h foi ativada."); window.setTimeout(updateNotificationStatus, 600); }
+    try { if (!state.oneSignal.Notifications.isPushSupported()) throw new Error("Este navegador não oferece notificações."); await state.oneSignal.User.PushSubscription.optIn(); track("notifications_enabled", { standalone: isStandalone(), ios: isIOS() }); showToast("Pronto! A palavra diária das 6h foi ativada."); window.setTimeout(updateNotificationStatus, 600); }
     catch (error) { button.disabled = false; byId("status-message").textContent = error && error.message ? error.message : "Não foi possível ativar agora."; }
   }
   function maybeOfferDailyNotification() {
@@ -338,9 +343,9 @@
   }
 
   function setupEvents() {
-    byId("share-button").addEventListener("click", shareCurrent); byId("install-button").addEventListener("click", installApp); var inviteButton = byId("notification-dialog-button"); if (inviteButton) inviteButton.addEventListener("click", function () { var dialog = byId("notification-dialog"); if (dialog && typeof dialog.close === "function") dialog.close(); requestNotifications(); });
+    byId("share-button").addEventListener("click", shareCurrent); byId("install-button").addEventListener("click", installApp); var instagramLink = document.querySelector(".pastoral-link.instagram"); if (instagramLink) instagramLink.addEventListener("click", function () { track("instagram_clicked"); }); var prayerLink = document.querySelector(".pastoral-link.whatsapp"); if (prayerLink) prayerLink.addEventListener("click", function () { track("prayer_request_clicked"); }); var inviteButton = byId("notification-dialog-button"); if (inviteButton) inviteButton.addEventListener("click", function () { var dialog = byId("notification-dialog"); if (dialog && typeof dialog.close === "function") dialog.close(); requestNotifications(); });
     window.addEventListener("beforeinstallprompt", function (event) { event.preventDefault(); state.deferredInstall = event; });
-    window.addEventListener("appinstalled", function () { state.deferredInstall = null; updateInstallButton(); showToast("Aplicativo instalado com sucesso."); });
+    window.addEventListener("appinstalled", function () { state.deferredInstall = null; track("app_installed", { ios: isIOS() }); updateInstallButton(); showToast("Aplicativo instalado com sucesso."); });
   }
   function watchDayChange() { window.setInterval(function () { var currentKey = dateKey(new Date()); if (state.renderedDateKey && currentKey !== state.renderedDateKey) loadDevotional(); }, 60000); }
   function registerOfflineWorker() { if ("serviceWorker" in navigator) window.addEventListener("load", function () { navigator.serviceWorker.register("./sw.js").catch(function () {}); }); }
