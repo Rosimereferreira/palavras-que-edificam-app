@@ -1,10 +1,12 @@
 import { readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 
 const APP_ID = process.env.ONESIGNAL_APP_ID;
 const API_KEY = process.env.ONESIGNAL_API_KEY;
 const SITE_URL = process.env.SITE_URL;
 const TIME_ZONE = "America/Campo_Grande";
 const SERIES_START_UTC = Date.UTC(2026, 8, 15);
+const IDEMPOTENCY_NAMESPACE = "b8b52f27-4ad1-4acd-a75d-66ea68f8c991";
 
 if (!APP_ID || !API_KEY || !SITE_URL) {
   throw new Error("Configure os segredos ONESIGNAL_APP_ID, ONESIGNAL_API_KEY e SITE_URL no GitHub.");
@@ -15,13 +17,74 @@ function datePartsInZone(date) {
     timeZone: TIME_ZONE,
     year: "numeric",
     month: "numeric",
-    day: "numeric"
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hourCycle: "h23"
   });
   const values = {};
   for (const part of formatter.formatToParts(date)) {
     if (part.type !== "literal") values[part.type] = Number(part.value);
   }
   return values;
+}
+
+function addDays(parts, amount) {
+  const date = new Date(Date.UTC(parts.year, parts.month - 1, parts.day + amount, 12));
+  return {
+    year: date.getUTCFullYear(),
+    month: date.getUTCMonth() + 1,
+    day: date.getUTCDate()
+  };
+}
+
+function dateKey(parts) {
+  return [
+    parts.year,
+    String(parts.month).padStart(2, "0"),
+    String(parts.day).padStart(2, "0")
+  ].join("-");
+}
+
+function targetDateParts(now) {
+  const local = datePartsInZone(now);
+  // A execução da noite prepara a mensagem do dia seguinte.
+  // A execução da madrugada funciona como segurança para o mesmo dia.
+  return local.hour >= 12 ? addDays(local, 1) : {
+    year: local.year,
+    month: local.month,
+    day: local.day
+  };
+}
+
+function zonedLocalTimeToUtc(parts, hour, minute) {
+  const guess = new Date(Date.UTC(parts.year, parts.month - 1, parts.day, hour, minute, 0));
+  const seen = datePartsInZone(guess);
+  const seenAsUtc = Date.UTC(seen.year, seen.month - 1, seen.day, seen.hour, seen.minute, 0);
+  const offsetMs = seenAsUtc - guess.getTime();
+  return new Date(guess.getTime() - offsetMs);
+}
+
+function uuidV5(name, namespace) {
+  const namespaceHex = namespace.replace(/-/g, "");
+  const namespaceBytes = Buffer.from(namespaceHex, "hex");
+  const hash = createHash("sha1")
+    .update(namespaceBytes)
+    .update(Buffer.from(name, "utf8"))
+    .digest();
+
+  const bytes = Buffer.from(hash.subarray(0, 16));
+  bytes[6] = (bytes[6] & 0x0f) | 0x50;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+  const hex = bytes.toString("hex");
+  return [
+    hex.slice(0, 8),
+    hex.slice(8, 12),
+    hex.slice(12, 16),
+    hex.slice(16, 20),
+    hex.slice(20, 32)
+  ].join("-");
 }
 
 function cycleDay(date) {
@@ -57,13 +120,13 @@ const giantPhrases = [
 ];
 
 const genericPhrases = [
-  "Uma verdade recebida pela fé pode mudar a forma como você atravessa este dia.",
-  "Deus não perdeu o controle da área da sua vida que hoje mais precisa de cuidado.",
-  "Você não precisa ter todas as respostas para responder a Deus com fé hoje.",
-  "O próximo passo pode ser simples, mas a obediência nunca é pequena nas mãos de Deus.",
-  "A fé cresce quando você troca a pressa de controlar pela coragem de confiar.",
-  "Deus pode usar uma decisão de hoje para iniciar uma mudança muito maior amanhã.",
-  "Guarde esta verdade: Deus continua fiel, mesmo quando o processo ainda não terminou."
+  "A Palavra de hoje não veio apenas para informar você, mas para transformar a forma como você caminha.",
+  "Aquilo que Deus revela ao coração pode mudar a maneira como você interpreta o que está vivendo.",
+  "Uma verdade obedecida vale mais do que muitas verdades apenas admiradas.",
+  "Deus também trabalha profundamente nas decisões que ninguém vê.",
+  "O coração muda quando a verdade de Deus fala mais alto do que o medo.",
+  "Uma resposta sincera a Deus hoje pode mudar o rumo dos próximos passos.",
+  "Não termine esta palavra apenas emocionada; termine decidida a viver o que Deus mostrou."
 ];
 
 function devotionalForDate(date) {
@@ -89,27 +152,39 @@ function devotionalForDate(date) {
   };
 }
 
-const devotional = devotionalForDate(new Date());
+const now = new Date();
+const targetParts = targetDateParts(now);
+const targetKey = dateKey(targetParts);
+const targetDate = new Date(Date.UTC(targetParts.year, targetParts.month - 1, targetParts.day, 12));
+const devotional = devotionalForDate(targetDate);
+const sendAt = zonedLocalTimeToUtc(targetParts, 6, 0);
+const sendInFuture = sendAt.getTime() > now.getTime() + 60000;
+
 let cleanSiteUrl = SITE_URL;
 while (cleanSiteUrl.endsWith("/")) cleanSiteUrl = cleanSiteUrl.slice(0, -1);
 
 const payload = {
   app_id: APP_ID,
   target_channel: "push",
-  filters: [
-    { field: "session_count", relation: ">", value: "0" }
-  ],
-  name: "Devocional diário - " + devotional.id,
+  included_segments: ["Subscribed Users"],
+  idempotency_key: uuidV5("diario-da-fe:" + targetKey, IDEMPOTENCY_NAMESPACE),
+  name: "Palavra do dia - " + targetKey + " - " + devotional.id,
   headings: {
-    en: "Diário da Fé Digital"
+    en: "Diário da Fé Digital",
+    pt: "Diário da Fé Digital"
   },
   contents: {
-    en: devotional.tema + " — " + devotional.frase
+    en: "A palavra de hoje já está disponível. Toque para ler. 🙏🏻",
+    pt: "A palavra de hoje já está disponível. Toque para ler. 🙏🏻"
   },
   url: cleanSiteUrl + "/",
   chrome_web_icon: cleanSiteUrl + "/icons/icon-192.png",
-  ttl: 86400
+  ttl: 43200
 };
+
+if (sendInFuture) {
+  payload.send_after = sendAt.toISOString();
+}
 
 const response = await fetch("https://api.onesignal.com/notifications", {
   method: "POST",
@@ -130,7 +205,13 @@ if (!response.ok) {
 }
 
 if (!result.id) {
-  throw new Error("Nenhuma notificação foi criada. Verifique se já existe um aparelho inscrito.");
+  throw new Error("Nenhuma notificação foi criada. Verifique se existem aparelhos com as notificações autorizadas.");
 }
 
-console.log("Devocional enviado com sucesso: " + devotional.tema);
+console.log(
+  (sendInFuture ? "Notificação programada" : "Notificação enviada imediatamente") +
+  " para " + targetKey +
+  " | palavra: " + devotional.tema +
+  " | horário planejado: 06:00 " + TIME_ZONE +
+  " | OneSignal ID: " + result.id
+);
