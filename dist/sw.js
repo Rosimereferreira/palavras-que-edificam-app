@@ -1,6 +1,6 @@
 "use strict";
 
-var CACHE_NAME = "diario-da-fe-digital-v10";
+var CACHE_NAME = "diario-da-fe-digital-v11";
 var APP_FILES = [
   "./",
   "./index.html",
@@ -10,6 +10,7 @@ var APP_FILES = [
   "./annual-devotional.js",
   "./config.js",
   "./devocionais.json",
+  "./outubro-mulheres.json",
   "./series-1.json",
   "./series-2.json",
   "./series-3.json",
@@ -52,6 +53,7 @@ self.addEventListener("fetch", function (event) {
     requestUrl.pathname.endsWith("/config.js") ||
     requestUrl.pathname.endsWith("/annual-devotional.js") ||
     requestUrl.pathname.endsWith("/devocionais.json") ||
+    requestUrl.pathname.endsWith("/outubro-mulheres.json") ||
     requestUrl.pathname.includes("/series-");
 
   if (preferNetwork) {
