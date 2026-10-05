@@ -2,14 +2,14 @@
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "name": "Diário da Fé Digital",
   "short_name": "Diário da Fé",
-  "description": "Devocionais, versículos, orações e mensagens para fortalecer a fé todos os dias.",
+  "description": "Diário da Fé Digital — devocionais diários. Em outubro, um especial de fé, cuidado e esperança para mulheres.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#2b0b1b",
-  "theme_color": "#5b1634",
+  "background_color": "#7a1f46",
+  "theme_color": "#c94f7c",
   "lang": "pt-BR",
   "icons": [
     {
