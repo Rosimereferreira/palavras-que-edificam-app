@@ -1,18 +1,63 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192" role="img" aria-labelledby="title">
-  <title id="title">DF — Diário da Fé Digital</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Diário da Fé Digital — Outubro Rosa">
   <defs>
-    <radialGradient id="bg" cx="35%" cy="25%" r="85%">
-      <stop offset="0%" stop-color="#7a1d45"/>
-      <stop offset="55%" stop-color="#5b1634"/>
-      <stop offset="100%" stop-color="#2b0b1b"/>
-    </radialGradient>
-    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#f6e7bd"/>
-      <stop offset="45%" stop-color="#d7ad63"/>
-      <stop offset="100%" stop-color="#fff2ca"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff7daf"/>
+      <stop offset=".48" stop-color="#e91e70"/>
+      <stop offset="1" stop-color="#bb0e55"/>
     </linearGradient>
+    <radialGradient id="pearl" cx=".32" cy=".28" r=".72">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".55" stop-color="#fcebf2"/>
+      <stop offset="1" stop-color="#dcaabd"/>
+    </radialGradient>
+    <linearGradient id="petal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff1f6"/>
+      <stop offset=".52" stop-color="#ff9fbe"/>
+      <stop offset="1" stop-color="#d91f68"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#6d1237" flood-opacity=".28"/>
+    </filter>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
   </defs>
-  <rect width="192" height="192" rx="40" fill="url(#bg)"/>
-  <circle cx="96" cy="96" r="76" fill="none" stroke="url(#gold)" stroke-width="3.5"/>
-  <text x="96" y="119" text-anchor="middle" fill="#fff4d6" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" letter-spacing="-3">DF</text>
+
+  <rect x="8" y="8" width="496" height="496" rx="112" fill="url(#bg)"/>
+  <path d="M28 122C132 26 368 20 484 118" fill="none" stroke="#fff" stroke-opacity=".14" stroke-width="17" stroke-linecap="round"/>
+  <circle cx="256" cy="258" r="177" fill="none" stroke="#fff7fb" stroke-opacity=".9" stroke-width="7" filter="url(#soft)"/>
+  <circle cx="256" cy="258" r="171" fill="none" stroke="#ffd7e5" stroke-width="3"/>
+
+  <!-- top-left rose -->
+  <g transform="translate(74 70)" filter="url(#shadow)">
+    <ellipse cx="48" cy="52" rx="49" ry="25" fill="#7f2146" opacity=".25" transform="rotate(-28 48 52)"/>
+    <path d="M47 65C12 52 6 16 31 7c18-7 31 9 35 23 5-14 22-28 39-18 26 16 8 50-18 60-18 7-26 5-40-7z" fill="url(#petal)"/>
+    <path d="M47 58C27 48 26 25 41 19c12-5 20 5 23 14 4-9 14-17 24-12 17 9 8 30-8 37-13 6-21 5-33 0z" fill="#ffbed0"/>
+    <path d="M52 51C42 44 44 31 53 27c8-3 13 4 15 10 4-6 12-9 18-4 8 7 3 17-6 21-10 5-18 3-28-3z" fill="#f65088"/>
+    <path d="M79 76c22 3 38 14 50 30-20 1-37-4-51-14z" fill="#b4496b"/>
+    <path d="M28 75C6 83-7 99-15 118c20-4 35-13 48-27z" fill="#d06b89"/>
+  </g>
+
+  <!-- bottom-right rose -->
+  <g transform="translate(362 374) rotate(8)" filter="url(#shadow)">
+    <path d="M47 65C12 52 6 16 31 7c18-7 31 9 35 23 5-14 22-28 39-18 26 16 8 50-18 60-18 7-26 5-40-7z" fill="url(#petal)"/>
+    <path d="M47 58C27 48 26 25 41 19c12-5 20 5 23 14 4-9 14-17 24-12 17 9 8 30-8 37-13 6-21 5-33 0z" fill="#ffbed0"/>
+    <path d="M52 51C42 44 44 31 53 27c8-3 13 4 15 10 4-6 12-9 18-4 8 7 3 17-6 21-10 5-18 3-28-3z" fill="#f65088"/>
+    <path d="M18 76c-22 4-39 14-52 29 20 2 38-4 52-14z" fill="#b4496b"/>
+  </g>
+
+  <!-- pearl accents -->
+  <g fill="url(#pearl)" stroke="#f7cfdd" stroke-width="2">
+    <circle cx="48" cy="176" r="11"/><circle cx="88" cy="146" r="8"/><circle cx="121" cy="42" r="9"/>
+    <circle cx="402" cy="409" r="10"/><circle cx="445" cy="378" r="8"/><circle cx="471" cy="417" r="7"/>
+    <circle cx="92" cy="112" r="6"/><circle cx="424" cy="447" r="6"/>
+  </g>
+
+  <!-- tiny blossoms -->
+  <g fill="#ffeaf2" opacity=".96">
+    <circle cx="56" cy="206" r="5"/><circle cx="69" cy="198" r="4"/><circle cx="77" cy="212" r="5"/>
+    <circle cx="438" cy="335" r="5"/><circle cx="451" cy="345" r="4"/><circle cx="429" cy="349" r="4"/>
+  </g>
+
+  <text x="256" y="329" text-anchor="middle" fill="#fffdfd" font-family="Georgia, 'Times New Roman', serif" font-size="184" font-weight="700" letter-spacing="-12" filter="url(#shadow)">DF</text>
 </svg>
