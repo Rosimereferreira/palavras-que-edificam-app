@@ -10,6 +10,10 @@
   function byId(id) { return document.getElementById(id); }
   function track(name, properties) { if (typeof window.trackDiarioEvent === "function") window.trackDiarioEvent(name, properties || {}); }
   function isIOS() { return /iphone|ipad|ipod/i.test(window.navigator.userAgent); }
+  function isOctoberSpecial(date) {
+    var p = datePartsInZone(date || new Date());
+    return p.year === 2026 && p.month === 10;
+  }
   function isStandalone() { return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true; }
   function openDialog(dialog) { if (dialog && typeof dialog.showModal === "function") dialog.showModal(); }
   function showToast(message) {
@@ -226,10 +230,26 @@
     byId("verse-text").textContent = devotional.versiculo;
     byId("verse-reference").textContent = devotional.referencia;
     byId("reflection-text").textContent = devotional.reflexao;
+    var learning = byId("learning-text");
+    if (learning) learning.textContent = devotional.aprendo || "A Palavra nos chama a responder com fé, verdade e uma decisão prática.";
     byId("prayer-text").textContent = devotional.oracao;
     byId("daily-action").textContent = devotional.tarefa;
+    var pearl = byId("pearl-text");
+    if (pearl) pearl.textContent = devotional.perola || "Deus continua formando em você uma história de fé, graça e esperança.";
     document.title = devotional.tema + " | Diário da Fé Digital";
     track("devotional_viewed", { devotional_id: devotional.id || "", theme: devotional.tema || "", series: devotional.serie || "", reference: devotional.referencia || "", date_key: state.renderedDateKey || "" });
+  }
+
+  async function loadOctoberDevotional() {
+    var response = await fetch("./outubro-mulheres.json", { cache: "no-store" });
+    if (!response.ok) throw new Error("Não foi possível carregar o especial Outubro Rosa.");
+    var items = await response.json();
+    var p = datePartsInZone(new Date());
+    var devotional = items[p.day - 1];
+    if (!devotional) throw new Error("Devocional de outubro não encontrado.");
+    devotional.id = "outubro-mulheres-" + String(p.day).padStart(2, "0");
+    devotional.serie = "Especial Outubro Rosa • Devocional para Mulheres";
+    renderDevotional(devotional);
   }
 
   async function loadLegacyDevotional() {
@@ -242,6 +262,10 @@
 
   async function loadDevotional() {
     try {
+      if (isOctoberSpecial(new Date())) {
+        await loadOctoberDevotional();
+        return;
+      }
       if (state.series.length !== 52) {
         var responses = await Promise.all(SERIES_FILES.map(function (path) { return fetch(path, { cache: "no-store" }); }));
         responses.forEach(function (response) { if (!response.ok) throw new Error("Não foi possível carregar uma série devocional."); });
@@ -347,9 +371,10 @@
     window.addEventListener("beforeinstallprompt", function (event) { event.preventDefault(); state.deferredInstall = event; });
     window.addEventListener("appinstalled", function () { state.deferredInstall = null; track("app_installed", { ios: isIOS() }); updateInstallButton(); showToast("Aplicativo instalado com sucesso."); });
   }
-  function watchDayChange() { window.setInterval(function () { var currentKey = dateKey(new Date()); if (state.renderedDateKey && currentKey !== state.renderedDateKey) loadDevotional(); }, 60000); }
+  function watchDayChange() { window.setInterval(function () { var currentKey = dateKey(new Date()); if (state.renderedDateKey && currentKey !== state.renderedDateKey) { document.body.classList.toggle("october-theme", isOctoberSpecial(new Date())); loadDevotional(); } }, 60000); }
   function registerOfflineWorker() { if ("serviceWorker" in navigator) window.addEventListener("load", function () { navigator.serviceWorker.register("./sw.js").catch(function () {}); }); }
 
+  document.body.classList.toggle("october-theme", isOctoberSpecial(new Date()));
   loadDevotional();
   setupEvents();
   updateInstallButton();
