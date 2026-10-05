@@ -15,8 +15,8 @@
     <link rel="stylesheet" href="./styles.css">
     <style>
       .brand-logo {
-        width: 60px;
-        height: 60px;
+        width: 72px;
+        height: 72px;
         flex: none;
         border: 1px solid rgba(255, 250, 244, 0.28);
         border-radius: 50%;
@@ -82,6 +82,16 @@
         color: #765f67;
         font-size: 0.8rem;
         line-height: 1.5;
+      }
+    
+      @media (max-width: 480px) {
+        .brand-logo {
+          width: 72px !important;
+          height: 72px !important;
+        }
+        .brand {
+          gap: 14px;
+        }
       }
     </style>
     <script src="./analytics.js"></script>
