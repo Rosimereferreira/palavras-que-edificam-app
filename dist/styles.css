@@ -505,3 +505,207 @@ noscript {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* Outubro Rosa */
+.october-banner {
+  display: none;
+}
+
+.october-theme {
+  --wine-950: #7a1f46;
+  --wine-900: #8f2852;
+  --wine-800: #a73764;
+  --wine-700: #bd4a77;
+  --rose-500: #d9789c;
+  --rose-200: #f0c2d3;
+  --blush-100: #fff0f5;
+  --cream-50: #fffafc;
+  --cream-100: #fcecf2;
+  --gold-500: #c6a16e;
+  --ink: #4b2333;
+  --muted: #86616f;
+  --shadow: 0 24px 60px rgba(113, 26, 61, 0.22);
+}
+
+.october-theme {
+  background:
+    radial-gradient(ellipse at 7% 9%, rgba(255, 212, 227, 0.34) 0 8%, transparent 9%),
+    radial-gradient(ellipse at 15% 4%, rgba(255, 238, 245, 0.24) 0 7%, transparent 8%),
+    radial-gradient(ellipse at 92% 20%, rgba(255, 213, 228, 0.28) 0 8%, transparent 9%),
+    radial-gradient(circle at 15% 12%, rgba(232, 129, 166, 0.34), transparent 30rem),
+    radial-gradient(circle at 90% 42%, rgba(249, 190, 211, 0.24), transparent 28rem),
+    linear-gradient(145deg, #7a1f46, #a73764 48%, #5c1535);
+}
+
+.october-theme .october-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(255,255,255,0.42);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 96% 8%, rgba(255,255,255,0.18), transparent 7rem),
+    rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 16px 38px rgba(78, 12, 43, 0.15);
+}
+
+.october-theme .october-banner strong {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.18rem;
+  color: #fff8fb;
+}
+
+.october-theme .october-banner p {
+  margin: 3px 0 0;
+  color: rgba(255,248,251,0.78);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.october-ribbon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  flex: none;
+  place-items: center;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.16);
+  font-size: 1.55rem;
+}
+
+.october-theme .daily-card {
+  border-color: rgba(255,255,255,0.88);
+  background:
+    radial-gradient(ellipse at 96% 4%, rgba(236, 168, 193, 0.23) 0 5%, transparent 6%),
+    radial-gradient(ellipse at 91% 8%, rgba(244, 195, 213, 0.22) 0 4%, transparent 5%),
+    radial-gradient(ellipse at 4% 98%, rgba(236, 168, 193, 0.17) 0 5%, transparent 6%),
+    linear-gradient(rgba(255,250,252,0.97), rgba(255,250,252,0.985)),
+    #fffafc;
+}
+
+.october-theme .card-glow {
+  background: radial-gradient(circle, rgba(217, 120, 156, 0.28), transparent 68%);
+}
+
+.october-theme .verse-card {
+  border-left-color: #c6a16e;
+  background: linear-gradient(135deg, #fde8f0, #fff4f8);
+}
+
+.october-theme .daily-step {
+  border-color: #f0c2d3;
+  background: linear-gradient(135deg, rgba(255, 236, 244, 0.86), rgba(255, 247, 250, 0.94));
+}
+
+.learning-section {
+  padding: 18px 19px;
+  border-left: 3px solid var(--rose-500);
+  border-radius: 4px 16px 16px 4px;
+  background: rgba(247, 233, 232, 0.44);
+}
+
+.october-theme .learning-section {
+  background: rgba(255, 236, 244, 0.72);
+}
+
+.pearl-card {
+  display: flex;
+  gap: 13px;
+  align-items: flex-start;
+  padding: 20px;
+  border: 1px solid var(--rose-200);
+  border-radius: 20px;
+  background: linear-gradient(145deg, #fffafc, #f9e8ee);
+}
+
+.pearl-card .pearl-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  place-items: center;
+  border: 1px solid #dfc6cf;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffffff, #f6e7ec 55%, #dcbfc9);
+  color: #b77f92;
+  box-shadow: inset 0 2px 7px rgba(255,255,255,0.9), 0 5px 12px rgba(111,38,66,0.10);
+  font-size: 0.55rem;
+}
+
+.pearl-card strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--wine-800);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1rem;
+}
+
+.pearl-card p {
+  margin: 0;
+  color: #5f4951;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.58;
+}
+
+.october-theme .pastoral-signature {
+  border-color: #efbfd0;
+  background: linear-gradient(135deg, rgba(255, 231, 240, 0.84), rgba(255, 249, 251, 0.96));
+}
+
+.october-theme .pastoral-signature .pastor-name {
+  color: #a73764;
+}
+
+.october-theme .pastoral-link.instagram {
+  border-color: #efbfd0;
+  background: #fff9fb;
+  color: #a73764;
+}
+
+.october-theme .pastoral-link.whatsapp {
+  border-color: #bd4a77;
+  background: #bd4a77;
+}
+
+.october-theme .action-panel {
+  border-color: rgba(255,255,255,0.28);
+  background: rgba(255,255,255,0.10);
+}
+
+.october-theme .primary-button {
+  border-color: #ffe4ee;
+  background: #ffe4ee;
+  color: #7a1f46;
+}
+
+.october-theme .secondary-button {
+  border-color: rgba(255,255,255,0.35);
+}
+
+.october-theme .action-panel .action-kicker,
+.october-theme .status-message {
+  color: #ffdbe8;
+}
+
+.october-theme .today-chip {
+  color: #ffe3ed;
+  border-color: rgba(255,255,255,0.30);
+}
+
+@media (max-width: 420px) {
+  .october-theme .october-banner {
+    align-items: flex-start;
+    padding: 14px;
+  }
+  .october-ribbon {
+    width: 42px;
+    height: 42px;
+  }
+}
