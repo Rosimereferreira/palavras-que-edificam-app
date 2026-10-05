@@ -25,6 +25,14 @@ jobs:
       - name: Baixar os arquivos
         uses: actions/checkout@v4
 
+      - name: Gerar ícones de Outubro Rosa
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+          rsvg-convert -w 192 -h 192 dist/icons/logo-diario-da-fe.svg -o dist/icons/icon-outubro-192.png
+          rsvg-convert -w 512 -h 512 dist/icons/logo-diario-da-fe.svg -o dist/icons/icon-outubro-512.png
+          rsvg-convert -w 512 -h 512 dist/icons/logo-diario-da-fe.svg -o dist/icons/icon-outubro-maskable-512.png
+
       - name: Preparar o GitHub Pages
         uses: actions/configure-pages@v5
 
