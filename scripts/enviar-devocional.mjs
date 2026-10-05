@@ -104,6 +104,8 @@ const groups = await Promise.all(
   })
 );
 const series = groups.flat();
+const octoberSource = await readFile(new URL("../dist/outubro-mulheres.json", import.meta.url), "utf8");
+const octoberDevotionals = JSON.parse(octoberSource);
 const octoberSpecials = JSON.parse(
   await readFile(new URL("../dist/outubro-mulheres.json", import.meta.url), "utf8")
 );
@@ -132,7 +134,22 @@ const genericPhrases = [
   "Não termine esta palavra apenas emocionada; termine decidida a viver o que Deus mostrou."
 ];
 
+function isOctoberWomenMonth(date) {
+  const parts = datePartsInZone(date);
+  return parts.year === 2026 && parts.month === 10;
+}
+
 function devotionalForDate(date) {
+  if (isOctoberWomenMonth(date)) {
+    const parts = datePartsInZone(date);
+    const special = octoberDevotionals[parts.day - 1];
+    if (!special) throw new Error("Devocional especial de outubro não encontrado.");
+    return {
+      id: `outubro-${String(parts.day).padStart(2, "0")}`,
+      tema: special.tema,
+      frase: special.frase
+    };
+  }
   const parts = datePartsInZone(date);
   if (parts.year === 2026 && parts.month === 10) {
     const special = octoberSpecials[parts.day - 1];
