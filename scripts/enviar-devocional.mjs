@@ -104,6 +104,9 @@ const groups = await Promise.all(
   })
 );
 const series = groups.flat();
+const octoberSpecials = JSON.parse(
+  await readFile(new URL("../dist/outubro-mulheres.json", import.meta.url), "utf8")
+);
 
 if (series.length !== 52) {
   throw new Error("O plano anual precisa conter 52 séries semanais.");
@@ -130,6 +133,17 @@ const genericPhrases = [
 ];
 
 function devotionalForDate(date) {
+  const parts = datePartsInZone(date);
+  if (parts.year === 2026 && parts.month === 10) {
+    const special = octoberSpecials[parts.day - 1];
+    if (!special) throw new Error("Devocional feminino de outubro não encontrado.");
+    return {
+      id: `outubro-mulheres-${String(parts.day).padStart(2, "0")}`,
+      tema: special.tema,
+      frase: special.frase
+    };
+  }
+
   const day = cycleDay(date);
   if (day === 364) {
     return {
@@ -174,8 +188,12 @@ const payload = {
     pt: "Diário da Fé Digital"
   },
   contents: {
-    en: "A palavra de hoje já está disponível. Toque para ler. 🙏🏻",
-    pt: "A palavra de hoje já está disponível. Toque para ler. 🙏🏻"
+    en: targetParts.year === 2026 && targetParts.month === 10
+      ? "Uma palavra especial para o coração de uma mulher já está disponível. 🎀"
+      : "A palavra de hoje já está disponível. Toque para ler. 🙏🏻",
+    pt: targetParts.year === 2026 && targetParts.month === 10
+      ? "Uma palavra especial para o coração de uma mulher já está disponível. 🎀"
+      : "A palavra de hoje já está disponível. Toque para ler. 🙏🏻"
   },
   url: cleanSiteUrl + "/",
   chrome_web_icon: cleanSiteUrl + "/icons/icon-192.png",
