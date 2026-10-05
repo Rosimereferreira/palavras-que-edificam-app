@@ -5,7 +5,8 @@
   var timeZone = config.timeZone || "America/Campo_Grande";
   var SERIES_START_UTC = Date.UTC(2026, 8, 15);
   var SERIES_FILES = ["./series-1.json", "./series-2.json", "./series-3.json", "./series-4.json"];
-  var state = { devotionals: [], series: [], current: null, renderedDateKey: null, deferredInstall: null, oneSignal: null, toastTimer: null };
+  var OCTOBER_DEVOTIONALS_FILE = "./outubro-mulheres.json";
+  var state = { devotionals: [], series: [], octoberDevotionals: [], current: null, renderedDateKey: null, deferredInstall: null, oneSignal: null, toastTimer: null };
 
   function byId(id) { return document.getElementById(id); }
   function track(name, properties) { if (typeof window.trackDiarioEvent === "function") window.trackDiarioEvent(name, properties || {}); }
@@ -29,6 +30,14 @@
     var values = {};
     formatter.formatToParts(date).forEach(function (part) { if (part.type !== "literal") values[part.type] = Number(part.value); });
     return { year: values.year, month: values.month, day: values.day };
+  }
+  function isOctoberWomenMonth(date) { var p = datePartsInZone(date); return p.year === 2026 && p.month === 10; }
+  function applyOctoberTheme() {
+    var active = isOctoberWomenMonth(new Date());
+    document.body.classList.toggle("october-rosa", active);
+    var banner = byId("october-banner"); if (banner) banner.hidden = !active;
+    var subtitle = byId("brand-subtitle"); if (subtitle) subtitle.textContent = active ? "Devocional para mulheres" : "Devocional diário";
+    var chip = byId("today-chip"); if (chip) chip.textContent = active ? "Outubro Rosa" : "Hoje";
   }
   function dateKey(date) {
     var p = datePartsInZone(date);
@@ -198,7 +207,15 @@
     return { serie: "Paz e Recomeço", tema: "Paz no coração", frase: "A oração transforma o lugar onde a ansiedade queria construir morada.", referencia: "Filipenses 4:6–7", versiculo: "Apresente seus pedidos a Deus, e a paz dele guardará o seu coração e a sua mente.", reflexao: "Nem sempre a oração muda a situação imediatamente, mas ela muda o ambiente dentro de nós. Quando você conversa com Deus, a ansiedade deixa de ser um monólogo e passa a ser uma entrega. A paz do Senhor pode guardar você mesmo antes de a resposta chegar.", oracao: "Pai, receba aquilo que tem ocupado meus pensamentos. Guarda meu coração e minha mente com uma paz maior do que minhas circunstâncias. Amém.", tarefa: "Troque dez minutos de preocupação por dez minutos de oração específica." };
   }
 
+  function octoberDevotionalForDate(date) {
+    var p = datePartsInZone(date);
+    var item = state.octoberDevotionals[p.day - 1];
+    if (!item) throw new Error("Devocional especial de outubro não encontrado.");
+    return Object.assign({ id: "outubro-" + String(p.day).padStart(2, "0"), serie: "Especial Outubro Rosa • Devocional para Mulheres" }, item);
+  }
+
   function devotionalForDate(date) {
+    if (isOctoberWomenMonth(date)) return octoberDevotionalForDate(date);
     var day = cycleDay(date);
     if (day === 364) {
       var special = specialDay();
@@ -262,6 +279,13 @@
 
   async function loadDevotional() {
     try {
+      applyOctoberTheme();
+      if (isOctoberWomenMonth(new Date()) && state.octoberDevotionals.length !== 31) {
+        var octoberResponse = await fetch(OCTOBER_DEVOTIONALS_FILE, { cache: "no-store" });
+        if (!octoberResponse.ok) throw new Error("Não foi possível carregar o especial de outubro.");
+        state.octoberDevotionals = await octoberResponse.json();
+        if (!Array.isArray(state.octoberDevotionals) || state.octoberDevotionals.length !== 31) throw new Error("O especial de outubro está incompleto.");
+      }
       if (isOctoberSpecial(new Date())) {
         await loadOctoberDevotional();
         return;
@@ -375,6 +399,7 @@
   function registerOfflineWorker() { if ("serviceWorker" in navigator) window.addEventListener("load", function () { navigator.serviceWorker.register("./sw.js").catch(function () {}); }); }
 
   document.body.classList.toggle("october-theme", isOctoberSpecial(new Date()));
+  applyOctoberTheme();
   loadDevotional();
   setupEvents();
   updateInstallButton();
