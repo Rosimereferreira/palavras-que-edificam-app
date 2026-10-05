@@ -13,15 +13,21 @@
   "lang": "pt-BR",
   "icons": [
     {
-      "src": "./icons/logo-diario-da-fe.svg?v=outubro-rosa-2",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "./icons/icon-outubro-v2-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/logo-diario-da-fe.svg?v=outubro-rosa-2",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "./icons/icon-outubro-v2-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-outubro-v2-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ]
