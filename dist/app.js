@@ -7,6 +7,7 @@
   var SERIES_FILES = ["./series-1.json", "./series-2.json", "./series-3.json", "./series-4.json"];
   var OCTOBER_DEVOTIONALS_FILE = "./outubro-mulheres.json";
   var state = { devotionals: [], series: [], octoberDevotionals: [], current: null, renderedDateKey: null, deferredInstall: null, oneSignal: null, toastTimer: null };
+  var LAST_DEVOTIONAL_KEY = "diario-fe-last-devotional-v1";
 
   function byId(id) { return document.getElementById(id); }
   function track(name, properties) { if (typeof window.trackDiarioEvent === "function") window.trackDiarioEvent(name, properties || {}); }
@@ -236,6 +237,42 @@
     return devotional;
   }
 
+  function saveLastDevotional(devotional) {
+    try {
+      window.localStorage.setItem(LAST_DEVOTIONAL_KEY, JSON.stringify({
+        devotional: devotional,
+        savedAt: Date.now(),
+        dateKey: dateKey(new Date())
+      }));
+    } catch (error) {}
+  }
+
+  function showLastDevotional() {
+    try {
+      var raw = window.localStorage.getItem(LAST_DEVOTIONAL_KEY);
+      if (!raw) return false;
+      var saved = JSON.parse(raw);
+      var devotional = saved && saved.devotional;
+      if (!devotional || !devotional.tema) return false;
+      state.current = devotional;
+      byId("date-label").textContent = "Última palavra salva no seu celular";
+      byId("devotional-title").textContent = devotional.tema || "Uma palavra para o seu coração";
+      byId("impact-phrase").textContent = devotional.frase || "";
+      byId("verse-text").textContent = devotional.versiculo || "";
+      byId("verse-reference").textContent = devotional.referencia || "";
+      byId("reflection-text").textContent = devotional.reflexao || "";
+      var learning = byId("learning-text");
+      if (learning) learning.textContent = devotional.aprendo || "";
+      byId("prayer-text").textContent = devotional.oracao || "";
+      byId("daily-action").textContent = devotional.tarefa || "";
+      var pearl = byId("pearl-text");
+      if (pearl) pearl.textContent = devotional.perola || "";
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   function renderDevotional(devotional) {
     state.current = devotional;
     state.renderedDateKey = dateKey(new Date());
@@ -254,6 +291,7 @@
     var pearl = byId("pearl-text");
     if (pearl) pearl.textContent = devotional.perola || "Deus continua formando em você uma história de fé, graça e esperança.";
     document.title = devotional.tema + " | Diário da Fé Digital";
+    saveLastDevotional(devotional);
     track("devotional_viewed", { devotional_id: devotional.id || "", theme: devotional.tema || "", series: devotional.serie || "", reference: devotional.referencia || "", date_key: state.renderedDateKey || "" });
   }
 
@@ -278,6 +316,7 @@
   }
 
   async function loadDevotional() {
+    var hasSavedDevotional = showLastDevotional();
     try {
       applyOctoberTheme();
       if (isOctoberWomenMonth(new Date()) && state.octoberDevotionals.length !== 31) {
@@ -301,10 +340,14 @@
     } catch (seriesError) {
       try { await loadLegacyDevotional(); }
       catch (error) {
-        byId("date-label").textContent = "Tente novamente em instantes";
+        if (hasSavedDevotional || showLastDevotional()) {
+          byId("status-message").textContent = "Sem conexão no momento. Mostrando a última palavra salva no seu celular.";
+          return;
+        }
+        byId("date-label").textContent = "Não foi possível atualizar agora";
         byId("devotional-title").textContent = "Deus continua perto";
-        byId("impact-phrase").textContent = "Mesmo quando algo falha, a fidelidade do Senhor permanece.";
-        byId("reflection-text").textContent = "Não conseguimos abrir a mensagem de hoje. Verifique sua conexão e atualize a página.";
+        byId("impact-phrase").textContent = "Mesmo quando a conexão falha, a fidelidade do Senhor permanece.";
+        byId("reflection-text").textContent = "Assim que sua internet voltar, abra novamente para receber a palavra de hoje.";
         byId("prayer-text").textContent = "Senhor, traz paz ao meu coração e conduz o meu dia. Amém.";
         byId("daily-action").textContent = "Respire fundo e leia Salmos 46.";
       }
@@ -347,7 +390,7 @@
   async function requestNotifications() {
     track("notification_permission_requested", { standalone: isStandalone(), ios: isIOS() });
     if (isIOS() && !isStandalone()) { openDialog(byId("install-dialog")); byId("status-message").textContent = "Depois de instalar, abra pelo ícone e ative as mensagens."; return; }
-    if (!state.oneSignal) { openDialog(byId("setup-dialog")); return; }
+    if (!state.oneSignal) { byId("status-message").textContent = "As notificações ainda estão sendo preparadas. Aguarde alguns segundos e tente novamente."; showToast("Aguarde um instante e tente novamente."); return; }
     var button = byId("notify-button"); button.disabled = true; byId("status-message").textContent = "Abrindo a autorização do aparelho…";
     try { if (!state.oneSignal.Notifications.isPushSupported()) throw new Error("Este navegador não oferece notificações."); await state.oneSignal.User.PushSubscription.optIn(); track("notifications_enabled", { standalone: isStandalone(), ios: isIOS() }); showToast("Pronto! A palavra diária das 6h foi ativada."); window.setTimeout(updateNotificationStatus, 600); }
     catch (error) { button.disabled = false; byId("status-message").textContent = error && error.message ? error.message : "Não foi possível ativar agora."; }
@@ -375,7 +418,7 @@
   function setupOneSignal() {
     var appId = String(config.oneSignalAppId || "").trim();
     var button = byId("notify-button");
-    if (!appId || appId.indexOf("COLE_AQUI") !== -1) { byId("status-message").textContent = "Versão de teste: falta conectar o serviço de notificações."; button.addEventListener("click", function () { openDialog(byId("setup-dialog")); }); return; }
+    if (!appId || appId.indexOf("COLE_AQUI") !== -1) { byId("status-message").textContent = "As notificações estão temporariamente indisponíveis. Tente novamente mais tarde."; button.addEventListener("click", function () { showToast("Notificações temporariamente indisponíveis."); }); return; }
     button.disabled = true; byId("status-message").textContent = "Preparando as mensagens diárias…"; window.OneSignalDeferred = window.OneSignalDeferred || [];
     var sdk = document.createElement("script"); sdk.src = "https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"; sdk.defer = true;
     sdk.onerror = function () { button.disabled = false; byId("status-message").textContent = "Não foi possível preparar as notificações. Tente novamente."; };
@@ -386,7 +429,7 @@
         var workerPath = basePath.substring(1) + "push/onesignal/OneSignalSDKWorker.js";
         await OneSignal.init({ appId: appId, serviceWorkerPath: workerPath, serviceWorkerParam: { scope: basePath + "push/onesignal/" }, autoResubscribe: true, persistNotification: false, promptOptions: { slidedown: { prompts: [{ type: "push", autoPrompt: false, text: { actionMessage: "Receba uma palavra bíblica para começar bem cada dia.", acceptButton: "Permitir", cancelButton: "Agora não" } }] } }, welcomeNotification: { title: "Diário da Fé Digital", message: "Pronto! Você receberá uma palavra bíblica todos os dias." } });
         state.oneSignal = OneSignal; OneSignal.User.PushSubscription.addEventListener("change", updateNotificationStatus); updateNotificationStatus(); maybeOfferDailyNotification(); button.addEventListener("click", requestNotifications);
-      } catch (error) { button.disabled = false; byId("status-message").textContent = "Confira o App ID e o endereço configurado no OneSignal."; }
+      } catch (error) { button.disabled = false; byId("status-message").textContent = "Não foi possível ativar as notificações agora. Tente novamente em instantes."; }
     });
   }
 
