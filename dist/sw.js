@@ -1,6 +1,6 @@
 "use strict";
 
-var CACHE_NAME = "diario-da-fe-digital-v18";
+var CACHE_NAME = "diario-da-fe-digital-v19";
 var APP_FILES = [
   "./",
   "./index.html",
@@ -23,9 +23,6 @@ var APP_FILES = [
   "./icons/icon-outubro-v2-180.png",
   "./icons/logo-diario-da-fe.png",
   "./icons/icon-192.png",
-  "./icons/icon-outubro-maskable-512.png",
-  "./icons/icon-outubro-512.png",
-  "./icons/icon-outubro-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png"
 ];
