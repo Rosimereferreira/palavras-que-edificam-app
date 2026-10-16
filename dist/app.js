@@ -8,6 +8,14 @@
   var OCTOBER_DEVOTIONALS_FILE = "./outubro-mulheres.json";
   var state = { devotionals: [], series: [], octoberDevotionals: [], current: null, renderedDateKey: null, deferredInstall: null, oneSignal: null, toastTimer: null };
   var LAST_DEVOTIONAL_KEY = "diario-fe-last-devotional-v1";
+  var READS_KEY = "diario-fe-read-history-v1";
+  var FAVORITES_KEY = "diario-fe-favorites-v1";
+  state.currentDateKey = null;
+  state.todayDevotional = null;
+  state.showingHistory = false;
+  state.historyTab = "reads";
+  state.storyBlob = null;
+  state.storyUrl = null;
 
   function byId(id) { return document.getElementById(id); }
   function track(name, properties) { if (typeof window.trackDiarioEvent === "function") window.trackDiarioEvent(name, properties || {}); }
@@ -37,8 +45,11 @@
     var active = isOctoberWomenMonth(new Date());
     document.body.classList.toggle("october-rosa", active);
     var banner = byId("october-banner"); if (banner) banner.hidden = !active;
-    var subtitle = byId("brand-subtitle"); if (subtitle) subtitle.textContent = active ? "Devocional para mulheres" : "Devocional diário";
+    var subtitle = byId("brand-subtitle") || document.querySelector(".brand small");
+    if (subtitle) subtitle.textContent = active ? "Especial Outubro Rosa • Devocional para Mulheres" : "Devocional diário";
     var chip = byId("today-chip"); if (chip) chip.textContent = active ? "Outubro Rosa" : "Hoje";
+    var footer = document.querySelector("footer span");
+    if (footer) footer.textContent = active ? "Diário da Fé Digital — Outubro Rosa: fé, cuidado e esperança para mulheres." : "Diário da Fé Digital — Uma palavra de fé para cada dia.";
   }
   function dateKey(date) {
     var p = datePartsInZone(date);
@@ -237,6 +248,182 @@
     return devotional;
   }
 
+
+  function injectFaithInterface() {
+    var section = document.createElement("section");
+    section.className = "faith-progress";
+    section.setAttribute("aria-labelledby", "faith-progress-title");
+    section.innerHTML = [
+      '<div class="faith-progress-heading"><div><p class="faith-eyebrow">MINHA CAMINHADA</p>',
+      '<h2 id="faith-progress-title">Um dia de cada vez 🌷</h2></div>',
+      '<span class="streak-badge" id="reading-streak">Comece hoje</span></div>',
+      '<p class="faith-progress-copy">Terminou de ler? Marque seu momento com Deus e guarde as palavras que tocaram seu coração.</p>',
+      '<div class="faith-progress-actions">',
+      '<button class="faith-button read-button" id="read-button" type="button">✓ Marcar como lida</button>',
+      '<button class="faith-button favorite-button" id="favorite-button" type="button" aria-pressed="false">♡ Guardar palavra</button></div>',
+      '<button class="faith-return" id="today-return" type="button" hidden>← Voltar à palavra de hoje</button>',
+      '<details class="faith-history" id="faith-history">',
+      '<summary>Minhas leituras e favoritas <span id="history-count"></span></summary>',
+      '<div class="history-tabs" role="group" aria-label="Ver leituras ou favoritas">',
+      '<button type="button" class="history-tab is-active" data-history-tab="reads" aria-pressed="true">Lidas</button>',
+      '<button type="button" class="history-tab" data-history-tab="favorites" aria-pressed="false">Favoritas</button>',
+      '</div><ul class="history-list" id="history-list"></ul></details>',
+      '<small class="faith-privacy">Seus registros ficam salvos somente neste aparelho.</small>'
+    ].join("");
+    document.querySelector(".devotional-body").insertAdjacentElement("afterend", section);
+
+    var share = byId("share-button"), wrap = document.createElement("div");
+    wrap.className = "share-actions";
+    share.parentNode.insertBefore(wrap, share);
+    wrap.appendChild(share);
+    var story = document.createElement("button");
+    story.className = "text-button story-action";
+    story.id = "story-button";
+    story.type = "button";
+    story.innerHTML = '<span aria-hidden="true">▣</span> Criar imagem para Story';
+    wrap.appendChild(story);
+
+    var dialog = document.createElement("dialog");
+    dialog.className = "help-dialog story-dialog";
+    dialog.id = "story-dialog";
+    dialog.innerHTML = [
+      '<form method="dialog"><button class="dialog-close" value="close" aria-label="Fechar">×</button>',
+      '<h2>Seu Story está pronto 🌷</h2><p>Compartilhe esta imagem e inspire alguém com a Palavra.</p>',
+      '<img id="story-preview" alt="Prévia da arte vertical com a palavra do dia">',
+      '<div class="story-dialog-actions">',
+      '<button class="primary-button" id="story-share" type="button">↗ Compartilhar imagem</button>',
+      '<button class="secondary-button story-save" id="story-download" type="button">↓ Salvar imagem</button>',
+      '</div><p class="story-help">No Instagram, acrescente o adesivo de link para levar as pessoas ao devocional completo.</p></form>'
+    ].join("");
+    document.body.appendChild(dialog);
+  }
+
+  function readRecords(key) {
+    try {
+      var items = JSON.parse(localStorage.getItem(key) || "[]");
+      return Array.isArray(items) ? items.filter(function (item) {
+        return item && /^\d{4}-\d{2}-\d{2}$/.test(item.key) && item.devotional && item.devotional.tema;
+      }) : [];
+    } catch (error) { return []; }
+  }
+
+  function writeRecords(key, items) {
+    try { localStorage.setItem(key, JSON.stringify(items.slice(0, 120))); return true; }
+    catch (error) { showToast("Não foi possível salvar neste aparelho."); return false; }
+  }
+
+  function recordDateLabel(key) {
+    return key && key.length === 10 ? key.slice(8) + "/" + key.slice(5, 7) + "/" + key.slice(0, 4) : "Palavra guardada";
+  }
+
+  function previousDateKey(key) {
+    var date = new Date(key + "T12:00:00Z");
+    if (Number.isNaN(date.getTime())) return "";
+    date.setUTCDate(date.getUTCDate() - 1);
+    return date.toISOString().slice(0, 10);
+  }
+
+  function consecutiveReadDays(items) {
+    var days = new Set(items.map(function (item) { return item.key; }));
+    var cursor = dateKey(new Date());
+    if (!days.has(cursor)) cursor = previousDateKey(cursor);
+    var count = 0;
+    while (days.has(cursor) && count < 120) { count++; cursor = previousDateKey(cursor); }
+    return count;
+  }
+
+  function renderHistoryList(reads, favorites) {
+    var list = byId("history-list");
+    list.replaceChildren();
+    var selected = (state.historyTab === "favorites" ? favorites : reads).slice()
+      .sort(function (a, b) { return b.key.localeCompare(a.key); }).slice(0, 20);
+    if (!selected.length) {
+      var empty = document.createElement("li");
+      empty.className = "history-empty";
+      empty.textContent = state.historyTab === "favorites" ? "Suas palavras favoritas aparecerão aqui. ♡" : "Marque uma palavra como lida para começar seu histórico. 🌷";
+      list.appendChild(empty);
+    }
+    selected.forEach(function (record) {
+      var li = document.createElement("li"), button = document.createElement("button");
+      button.type = "button";
+      button.className = "history-item";
+      button.dataset.recordKey = record.key;
+      var title = document.createElement("strong"), subtitle = document.createElement("small");
+      title.textContent = record.devotional.tema;
+      subtitle.textContent = recordDateLabel(record.key) + " • " + (record.devotional.referencia || "Palavra guardada");
+      button.appendChild(title);
+      button.appendChild(subtitle);
+      li.appendChild(button);
+      list.appendChild(li);
+    });
+  }
+
+  function updateFaithUI() {
+    var reads = readRecords(READS_KEY), favorites = readRecords(FAVORITES_KEY);
+    var streak = consecutiveReadDays(reads);
+    byId("reading-streak").textContent = streak ? streak + (streak === 1 ? " dia seguido" : " dias seguidos") : "Comece hoje";
+    byId("history-count").textContent = reads.length + " lidas • " + favorites.length + " favoritas";
+    var key = state.currentDateKey;
+    var marked = reads.some(function (r) { return r.key === key; });
+    var favored = favorites.some(function (r) { return r.key === key; });
+    var canRead = !!state.current && key === dateKey(new Date()) && !state.showingHistory;
+    var readButton = byId("read-button");
+    readButton.disabled = !canRead || marked;
+    readButton.textContent = !canRead ? "✓ Leitura de outro dia" : marked ? "✓ Palavra lida hoje" : "✓ Marcar como lida";
+    var favoriteButton = byId("favorite-button");
+    favoriteButton.disabled = !state.current || !key;
+    favoriteButton.textContent = favored ? "♥ Palavra guardada" : "♡ Guardar palavra";
+    favoriteButton.setAttribute("aria-pressed", favored ? "true" : "false");
+    byId("today-return").hidden = !state.showingHistory || !state.todayDevotional;
+    document.querySelectorAll("[data-history-tab]").forEach(function (button) {
+      var active = button.dataset.historyTab === state.historyTab;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    renderHistoryList(reads, favorites);
+  }
+
+  function markCurrentRead() {
+    if (!state.current || state.showingHistory || state.currentDateKey !== dateKey(new Date())) return;
+    var reads = readRecords(READS_KEY);
+    if (reads.some(function (r) { return r.key === state.currentDateKey; })) return;
+    reads.unshift({ key: state.currentDateKey, devotional: state.current, readAt: Date.now() });
+    if (writeRecords(READS_KEY, reads)) {
+      track("devotional_marked_read", { devotional_id: state.current.id || "", date_key: state.currentDateKey });
+      showToast("Seu momento com Deus foi registrado. 🌷");
+      updateFaithUI();
+    }
+  }
+
+  function toggleFavorite() {
+    if (!state.current || !state.currentDateKey) return;
+    var items = readRecords(FAVORITES_KEY);
+    var exists = items.some(function (r) { return r.key === state.currentDateKey; });
+    if (exists) items = items.filter(function (r) { return r.key !== state.currentDateKey; });
+    else items.unshift({ key: state.currentDateKey, devotional: state.current, savedAt: Date.now() });
+    if (writeRecords(FAVORITES_KEY, items)) {
+      track(exists ? "devotional_unfavorited" : "devotional_favorited", { devotional_id: state.current.id || "", date_key: state.currentDateKey });
+      showToast(exists ? "Palavra retirada dos favoritos." : "Palavra guardada nos favoritos. ♥");
+      updateFaithUI();
+    }
+  }
+
+  function openHistoryRecord(key) {
+    var records = readRecords(state.historyTab === "favorites" ? FAVORITES_KEY : READS_KEY);
+    var item = records.find(function (r) { return r.key === key; });
+    if (!item) return;
+    renderDevotional(item.devotional, { historicalDateKey: item.key });
+    byId("faith-history").open = false;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    track("devotional_history_opened", { date_key: key, source: state.historyTab });
+  }
+
+  function returnToToday() {
+    if (state.todayDevotional) renderDevotional(state.todayDevotional);
+    else loadDevotional();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   function saveLastDevotional(devotional) {
     try {
       window.localStorage.setItem(LAST_DEVOTIONAL_KEY, JSON.stringify({
@@ -255,6 +442,9 @@
       var devotional = saved && saved.devotional;
       if (!devotional || !devotional.tema) return false;
       state.current = devotional;
+      state.currentDateKey = saved.dateKey || null;
+      state.showingHistory = state.currentDateKey !== dateKey(new Date());
+      if (!state.showingHistory) state.todayDevotional = devotional;
       byId("date-label").textContent = "Última palavra salva no seu celular";
       byId("devotional-title").textContent = devotional.tema || "Uma palavra para o seu coração";
       byId("impact-phrase").textContent = devotional.frase || "";
@@ -267,16 +457,21 @@
       byId("daily-action").textContent = devotional.tarefa || "";
       var pearl = byId("pearl-text");
       if (pearl) pearl.textContent = devotional.perola || "";
+      updateFaithUI();
       return true;
     } catch (error) {
       return false;
     }
   }
 
-  function renderDevotional(devotional) {
+  function renderDevotional(devotional, options) {
+    var historicalKey = options && options.historicalDateKey;
     state.current = devotional;
+    state.currentDateKey = historicalKey || dateKey(new Date());
+    state.showingHistory = !!historicalKey;
     state.renderedDateKey = dateKey(new Date());
-    var label = formattedDate(new Date());
+    if (!historicalKey) state.todayDevotional = devotional;
+    var label = historicalKey ? "Palavra de " + recordDateLabel(historicalKey) : formattedDate(new Date());
     if (devotional.serie) label += " • Série: " + devotional.serie;
     byId("date-label").textContent = label;
     byId("devotional-title").textContent = devotional.tema;
@@ -291,8 +486,11 @@
     var pearl = byId("pearl-text");
     if (pearl) pearl.textContent = devotional.perola || "Deus continua formando em você uma história de fé, graça e esperança.";
     document.title = devotional.tema + " | Diário da Fé Digital";
-    saveLastDevotional(devotional);
-    track("devotional_viewed", { devotional_id: devotional.id || "", theme: devotional.tema || "", series: devotional.serie || "", reference: devotional.referencia || "", date_key: state.renderedDateKey || "" });
+    if (!historicalKey) {
+      saveLastDevotional(devotional);
+      track("devotional_viewed", { devotional_id: devotional.id || "", theme: devotional.tema || "", series: devotional.serie || "", reference: devotional.referencia || "", date_key: state.renderedDateKey || "" });
+    }
+    updateFaithUI();
   }
 
   async function loadOctoberDevotional() {
@@ -366,6 +564,134 @@
     } catch (error) { if (error && error.name !== "AbortError") showToast("Não foi possível compartilhar agora."); }
   }
 
+
+  function storyRounded(ctx, x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+
+  function storyFlower(ctx, x, y, r, color) {
+    ctx.save(); ctx.translate(x, y); ctx.fillStyle = color;
+    for (var i = 0; i < 6; i++) {
+      ctx.rotate(Math.PI / 3); ctx.beginPath();
+      ctx.ellipse(0, -r * .64, r * .37, r * .62, 0, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.fillStyle = "#f4d4a2"; ctx.beginPath();
+    ctx.arc(0, 0, r * .24, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  }
+
+  function storyWrap(ctx, text, width) {
+    var words = String(text || "").trim().split(/\s+/), lines = [], line = "";
+    words.forEach(function (word) {
+      var candidate = line ? line + " " + word : word;
+      if (line && ctx.measureText(candidate).width > width) { lines.push(line); line = word; }
+      else line = candidate;
+    });
+    if (line) lines.push(line);
+    return lines;
+  }
+
+  function storyText(ctx, value, x, y, width, maxLines, initialSize, minSize, ratio, color, bold) {
+    var size = initialSize, lines = [];
+    while (size >= minSize) {
+      ctx.font = (bold ? "bold " : "") + size + "px Georgia, serif";
+      lines = storyWrap(ctx, value, width);
+      if (lines.length <= maxLines) break;
+      size -= 2;
+    }
+    if (lines.length > maxLines) {
+      lines = lines.slice(0, maxLines);
+      var last = lines[maxLines - 1];
+      while (last.length > 1 && ctx.measureText(last + "…").width > width) last = last.slice(0, -1);
+      lines[maxLines - 1] = last.trimEnd() + "…";
+    }
+    ctx.textAlign = "left"; ctx.fillStyle = color;
+    var step = size * ratio;
+    lines.forEach(function (line, i) { ctx.fillText(line, x, y + i * step); });
+    return y + lines.length * step;
+  }
+
+  function createStoryImage() {
+    if (!state.current) { showToast("Aguarde a palavra carregar."); return; }
+    var canvas = document.createElement("canvas");
+    canvas.width = 1080; canvas.height = 1920;
+    var ctx = canvas.getContext("2d");
+    if (!ctx) { showToast("Não foi possível criar a imagem neste aparelho."); return; }
+    var bg = ctx.createLinearGradient(0, 0, 1080, 1920);
+    bg.addColorStop(0, "#f7dce6"); bg.addColorStop(.5, "#fff6f4"); bg.addColorStop(1, "#f3c9d8");
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, 1080, 1920);
+    ctx.fillStyle = "rgba(202,91,130,.10)";
+    ctx.beginPath(); ctx.ellipse(1040, 280, 350, 510, -.25, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(40, 1640, 360, 460, .25, 0, Math.PI * 2); ctx.fill();
+    storyFlower(ctx, 945, 225, 115, "rgba(214,126,153,.38)");
+    storyFlower(ctx, 105, 1570, 90, "rgba(213,117,148,.22)");
+    storyFlower(ctx, 994, 1630, 48, "rgba(211,111,147,.22)");
+    ctx.textAlign = "center"; ctx.fillStyle = "#82314e";
+    ctx.font = "bold 39px Georgia, serif"; ctx.fillText("DIÁRIO DA FÉ DIGITAL", 540, 190);
+    ctx.fillStyle = "#ad5b79"; ctx.font = "27px Arial, sans-serif";
+    ctx.fillText(isOctoberSpecial(new Date()) ? "ESPECIAL OUTUBRO ROSA • FÉ E ESPERANÇA" : "UMA PALAVRA DE FÉ PARA O SEU DIA", 540, 242);
+    ctx.shadowColor = "rgba(97,36,59,.14)"; ctx.shadowBlur = 46; ctx.shadowOffsetY = 15;
+    storyRounded(ctx, 65, 318, 950, 1240, 48);
+    ctx.fillStyle = "#fffaf9"; ctx.fill();
+    ctx.shadowColor = "transparent"; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+    ctx.strokeStyle = "#ecc3d1"; ctx.lineWidth = 3; ctx.stroke();
+    ctx.textAlign = "left"; ctx.fillStyle = "#a64f72"; ctx.font = "bold 27px Arial, sans-serif";
+    ctx.fillText(state.showingHistory ? "UMA PALAVRA PARA GUARDAR" : "A PALAVRA DE HOJE", 130, 405);
+    var titleEnd = storyText(ctx, state.current.tema, 130, 515, 820, 3, 84, 62, 1.16, "#64283f", true);
+    ctx.fillStyle = "#df9cb4"; ctx.fillRect(130, Math.max(750, titleEnd + 22), 142, 6);
+    var phraseStart = Math.max(870, titleEnd + 150);
+    ctx.fillStyle = "#d68da6"; ctx.font = "120px Georgia, serif"; ctx.fillText("“", 115, phraseStart + 6);
+    var phraseEnd = storyText(ctx, state.current.frase || state.current.versiculo, 152, phraseStart + 70, 775, 7, 60, 42, 1.28, "#4f2a39", false);
+    ctx.fillStyle = "#a14a6b"; ctx.font = "bold 35px Arial, sans-serif";
+    ctx.fillText(state.current.referencia || "Palavra de Deus", 135, Math.min(1490, Math.max(phraseEnd + 70, 1430)));
+    storyRounded(ctx, 120, 1630, 840, 118, 33); ctx.fillStyle = "#8e3758"; ctx.fill();
+    ctx.fillStyle = "#fffaf9"; ctx.textAlign = "center"; ctx.font = "bold 37px Arial, sans-serif";
+    ctx.fillText("LEIA O DEVOCIONAL COMPLETO", 540, 1683);
+    ctx.font = "28px Arial, sans-serif"; ctx.fillText("Toque no link deste Story", 540, 1723);
+    ctx.fillStyle = "#813451"; ctx.font = "bold 36px Georgia, serif";
+    ctx.fillText("@diariodafedigital", 540, 1833);
+    ctx.font = "25px Arial, sans-serif";
+    ctx.fillText("Uma palavra pode transformar o seu dia. ♡", 540, 1880);
+    try {
+      var data = canvas.toDataURL("image/png");
+      var binary = window.atob(data.split(",")[1]), bytes = new Uint8Array(binary.length);
+      for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      state.storyBlob = new Blob([bytes], { type: "image/png" });
+      byId("story-preview").src = data;
+      openDialog(byId("story-dialog"));
+      track("story_image_created", { devotional_id: state.current.id || "", date_key: state.currentDateKey || "" });
+    } catch (error) { showToast("Não foi possível gerar a imagem. Tente novamente."); }
+  }
+
+  async function shareStoryImage() {
+    if (!state.storyBlob) return;
+    var imageFile = new File([state.storyBlob], "diario-da-fe-story.png", { type: "image/png" });
+    try {
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [imageFile] })) {
+        await navigator.share({ files: [imageFile], title: "Diário da Fé Digital" });
+        track("story_image_shared");
+        return;
+      }
+      saveStoryImage();
+    } catch (error) {
+      if (error && error.name !== "AbortError") showToast("Use o botão Salvar imagem para publicar.");
+    }
+  }
+
+  function saveStoryImage() {
+    if (!state.storyBlob) return;
+    if (state.storyUrl) URL.revokeObjectURL(state.storyUrl);
+    state.storyUrl = URL.createObjectURL(state.storyBlob);
+    var a = document.createElement("a");
+    a.href = state.storyUrl; a.download = "diario-da-fe-story.png";
+    document.body.appendChild(a); a.click(); a.remove();
+    track("story_image_saved");
+    showToast("Imagem pronta para publicar no Story. 🌷");
+  }
+
   function updateInstallButton() {
     var button = byId("install-button");
     if (isStandalone()) { button.innerHTML = "<span aria-hidden=\"true\">✓</span> Instalado no celular"; button.disabled = true; }
@@ -434,6 +760,19 @@
   }
 
   function setupEvents() {
+    byId("read-button").addEventListener("click", markCurrentRead);
+    byId("favorite-button").addEventListener("click", toggleFavorite);
+    byId("today-return").addEventListener("click", returnToToday);
+    document.querySelectorAll("[data-history-tab]").forEach(function (button) {
+      button.addEventListener("click", function () { state.historyTab = button.dataset.historyTab; updateFaithUI(); });
+    });
+    byId("history-list").addEventListener("click", function (event) {
+      var target = event.target.closest("button[data-record-key]");
+      if (target) openHistoryRecord(target.dataset.recordKey);
+    });
+    byId("story-button").addEventListener("click", createStoryImage);
+    byId("story-share").addEventListener("click", shareStoryImage);
+    byId("story-download").addEventListener("click", saveStoryImage);
     byId("share-button").addEventListener("click", shareCurrent); byId("install-button").addEventListener("click", installApp); var instagramLink = document.querySelector(".pastoral-link.instagram"); if (instagramLink) instagramLink.addEventListener("click", function () { track("instagram_clicked"); }); var prayerLink = document.querySelector(".pastoral-link.whatsapp"); if (prayerLink) prayerLink.addEventListener("click", function () { track("prayer_request_clicked"); }); var inviteButton = byId("notification-dialog-button"); if (inviteButton) inviteButton.addEventListener("click", function () { var dialog = byId("notification-dialog"); if (dialog && typeof dialog.close === "function") dialog.close(); requestNotifications(); });
     window.addEventListener("beforeinstallprompt", function (event) { event.preventDefault(); state.deferredInstall = event; });
     window.addEventListener("appinstalled", function () { state.deferredInstall = null; track("app_installed", { ios: isIOS() }); updateInstallButton(); showToast("Aplicativo instalado com sucesso."); });
@@ -443,6 +782,8 @@
 
   document.body.classList.toggle("october-theme", isOctoberSpecial(new Date()));
   applyOctoberTheme();
+  injectFaithInterface();
+  updateFaithUI();
   loadDevotional();
   setupEvents();
   updateInstallButton();
