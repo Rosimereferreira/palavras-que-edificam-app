@@ -93,6 +93,8 @@
           gap: 14px;
         }
       }
+
+      .audio-player{margin:20px 0;padding:18px;border:1px solid #e9cbd7;border-radius:18px;background:linear-gradient(135deg,#fffaf8,#f9e9f0)}.audio-player h2{margin:0 0 5px;color:#762245;font:700 22px Georgia,serif}.audio-player p{color:#765f67;font-size:13px;line-height:1.55}.audio-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.audio-actions button{border:0;border-radius:12px;background:#762245;color:#fff;padding:12px 14px;font:700 13px system-ui;cursor:pointer}.audio-actions button.audio-secondary{background:#f2dce6;color:#762245}.audio-actions button:disabled{opacity:.45;cursor:not-allowed}.audio-actions select{border:1px solid #dcb4c6;background:white;color:#762245;border-radius:10px;padding:11px;font:700 13px system-ui}.audio-player [role=status]{margin:9px 0 0;min-height:18px}
     </style>
     <script src="./analytics.js"></script>
     <script src="./config.js"></script>
@@ -131,6 +133,10 @@
           <cite id="verse-reference"></cite>
         </blockquote>
 
+        <section class="audio-player" id="audio-palavra" data-audio-ids="devotional-title,verse-reference,verse-text,reflection-text,learning-text,prayer-text,daily-action,pearl-text" data-audio-watch="devotional-title" aria-label="Ouvir a Palavra">
+          <h2>🎧 Ouvir a Palavra</h2><p>Escute a reflexão e a oração em português. A voz depende das opções do seu aparelho.</p>
+          <div class="audio-actions"><button id="audio-start" type="button">▶ Ouvir a Palavra</button><button id="audio-pause" class="audio-secondary" type="button" disabled>⏸ Pausar</button><button id="audio-stop" class="audio-secondary" type="button" disabled>■ Parar</button><label for="audio-rate" style="font-size:13px;font-weight:700;color:#762245">Velocidade</label><select id="audio-rate" aria-label="Velocidade da leitura"><option value="0.8">Calma</option><option value="0.9" selected>Normal</option><option value="1.1">Rápida</option></select></div><p id="audio-status" role="status" aria-live="polite"></p>
+        </section>
         <div class="devotional-body">
           <section>
             <h2>Reflexão</h2>
@@ -271,6 +277,7 @@
         window.location.href = './compartilhar.html?' + params.toString();
       });
     </script>
+    <script src="./audio-palavra.js" defer></script>
     <noscript>Este aplicativo precisa do JavaScript ativado para mostrar o devocional diário.</noscript>
   </body>
 </html>
