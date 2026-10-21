@@ -19,7 +19,7 @@ function init(){
   pause.addEventListener("click",function(){if(!playing)return;try{if(paused){synth.resume();paused=false;status.textContent="🔊 Leitura retomada."}else{synth.pause();paused=true;status.textContent="⏸ Leitura pausada."}update()}catch(e){end("Não foi possível pausar ou continuar. Tente ouvir novamente.")}});
   stop.addEventListener("click",function(){end("Leitura interrompida.")});
   rate.addEventListener("change",function(){if(playing)status.textContent="Velocidade alterada. Será aplicada ao próximo trecho."});
-  var watched=host.getAttribute("data-audio-watch");if(watched){var el=document.getElementById(watched);if(el&&window.MutationObserver){var observer=new MutationObserver(function(){if(playing)end("A Palavra mudou. Toque em Ouvir para começar a nova leitura.")});observer.observe(el,{childList:true,characterData:true,subtree:true})}}
+  var watched=host.getAttribute("data-audio-watch");if(watched){var el=document.getElementById(watched);if(el&&window.MutationObserver){var observer=new window.MutationObserver(function(){if(playing)end("A Palavra mudou. Toque em Ouvir para começar a nova leitura.")});observer.observe(el,{childList:true,characterData:true,subtree:true})}}
   window.addEventListener("pagehide",function(){if(playing)end("")});update()
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
