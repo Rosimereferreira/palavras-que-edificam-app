@@ -95,6 +95,8 @@
       }
 
       .audio-player{margin:20px 0;padding:18px;border:1px solid #e9cbd7;border-radius:18px;background:linear-gradient(135deg,#fffaf8,#f9e9f0)}.audio-player h2{margin:0 0 5px;color:#762245;font:700 22px Georgia,serif}.audio-player p{color:#765f67;font-size:13px;line-height:1.55}.audio-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.audio-actions button{border:0;border-radius:12px;background:#762245;color:#fff;padding:12px 14px;font:700 13px system-ui;cursor:pointer}.audio-actions button.audio-secondary{background:#f2dce6;color:#762245}.audio-actions button:disabled{opacity:.45;cursor:not-allowed}.audio-actions select{border:1px solid #dcb4c6;background:white;color:#762245;border-radius:10px;padding:11px;font:700 13px system-ui}.audio-player [role=status]{margin:9px 0 0;min-height:18px}
+
+      .special-audio{margin:18px 0 22px;padding:20px;border:1px solid #e8c8cf;border-radius:20px;background:linear-gradient(145deg,#fff9f6,#f7e6ec)}.special-audio h2{margin:0 0 8px;color:#762245;font:700 23px Georgia,serif}.special-audio p{font-size:14px;color:#765f67;line-height:1.6}.special-audio audio{display:block;width:100%;margin:14px 0 5px}.special-audio .special-signature{font-weight:700;color:#762245}.special-audio[hidden]{display:none}
     </style>
     <script src="./analytics.js"></script>
     <script src="./config.js"></script>
@@ -133,6 +135,26 @@
           <cite id="verse-reference"></cite>
         </blockquote>
 
+        <section class="special-audio" id="special-audio" hidden aria-labelledby="special-audio-title">
+          <h2 id="special-audio-title">🎧 Uma mensagem especial para você</h2>
+          <p><strong>Deus ainda está cuidando de você</strong></p>
+          <p>Uma palavra de fé e esperança, com voz humana e instrumental suave de oração e adoração.</p>
+          <audio id="special-audio-player" controls preload="none" aria-label="Ouvir mensagem especial Deus ainda está cuidando de você">
+            <source src="./audios/deus-ainda-esta-cuidando-de-voce.mp3" type="audio/mpeg">
+            Seu navegador não oferece reprodução de áudio.
+          </audio>
+          <p class="special-signature">💗 Ouça com calma. Deus está com você.</p>
+        </section>
+        <script>
+        (function(){
+          var section=document.getElementById('special-audio');
+          var audio=document.getElementById('special-audio-player');
+          var src=audio.querySelector('source').getAttribute('src');
+          fetch(src,{method:'HEAD',cache:'no-store'}).then(function(response){
+            if(response.ok && /audio|octet-stream/i.test(response.headers.get('content-type')||'audio/mpeg'))section.hidden=false;
+          }).catch(function(){});
+        })();
+        </script>
         <section class="audio-player" id="audio-palavra" data-audio-ids="devotional-title,verse-reference,verse-text,reflection-text,learning-text,prayer-text,daily-action,pearl-text" data-audio-watch="devotional-title" aria-label="Ouvir a Palavra">
           <h2>🎧 Ouvir a Palavra</h2><p>Escute a reflexão e a oração em português. A voz depende das opções do seu aparelho.</p>
           <div class="audio-actions"><button id="audio-start" type="button">▶ Ouvir a Palavra</button><button id="audio-pause" class="audio-secondary" type="button" disabled>⏸ Pausar</button><button id="audio-stop" class="audio-secondary" type="button" disabled>■ Parar</button><label for="audio-rate" style="font-size:13px;font-weight:700;color:#762245">Velocidade</label><select id="audio-rate" aria-label="Velocidade da leitura"><option value="0.8">Calma</option><option value="0.9" selected>Normal</option><option value="1.1">Rápida</option></select></div><p id="audio-status" role="status" aria-live="polite"></p>
