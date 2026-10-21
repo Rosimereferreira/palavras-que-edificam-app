@@ -195,6 +195,7 @@
           <span aria-hidden="true">↗</span>
           Compartilhar esta palavra
         </button>
+        <button class="text-button" id="create-image-button" type="button" style="margin-top:10px;border:1px solid #e8c8cf;border-radius:14px;padding:14px 18px;background:#fffaf4;color:#762245;font-weight:800;width:100%">🎨 Transformar a palavra de hoje em imagem</button>
       </section>
 
       <section class="action-panel" aria-label="Opções do aplicativo">
@@ -261,6 +262,14 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+    <script>
+      document.getElementById('create-image-button').addEventListener('click', function () {
+        var read = function (id) { var e = document.getElementById(id); return e ? (e.textContent || '').trim() : ''; };
+        var ref = read('verse-reference'), verse = read('verse-text'), quote = read('pearl-text') || read('impact-phrase');
+        var params = new URLSearchParams({title:read('devotional-title') || 'Palavra de hoje',ref:ref,quote:quote || verse,verse:verse});
+        window.location.href = './compartilhar.html?' + params.toString();
+      });
+    </script>
     <noscript>Este aplicativo precisa do JavaScript ativado para mostrar o devocional diário.</noscript>
   </body>
 </html>
