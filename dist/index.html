@@ -98,7 +98,7 @@
 
       .special-audio{margin:18px 0 22px;padding:20px;border:1px solid #e8c8cf;border-radius:20px;background:linear-gradient(145deg,#fff9f6,#f7e6ec)}.special-audio h2{margin:0 0 8px;color:#762245;font:700 23px Georgia,serif}.special-audio p{font-size:14px;color:#765f67;line-height:1.6}.special-audio audio{display:block;width:100%;margin:14px 0 5px}.special-audio .special-signature{font-weight:700;color:#762245}.special-audio[hidden]{display:none}
 .momento-com-deus{margin:20px 0;padding:19px;border:1px solid #e9cbd7;border-radius:18px;background:linear-gradient(135deg,#fffaf8,#f9e9f0)}.momento-com-deus h2,.momento-com-deus h3{margin:0 0 8px;color:#762245;font:700 22px Georgia,serif}.momento-com-deus p{line-height:1.7;color:#765f67;font-size:14px}.momento-com-deus button{background:#762245;color:white;border:0;border-radius:12px;padding:13px 16px;font-weight:750;cursor:pointer}.momento-com-deus [data-momento-panel]{padding-top:12px}.momento-com-deus [data-momento-panel][hidden]{display:none}.momento-com-deus [data-momento-step]{font-weight:800;color:#9b3b63}
-    </style>
+    .quick-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:14px 0 20px}.quick-nav a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 5px;border:1px solid #ebdce1;border-radius:10px;background:#fffaf9;color:#743c58;text-decoration:none;text-align:center;font:650 12px/1.25 system-ui,-apple-system,sans-serif;letter-spacing:-.1px}.quick-nav a[aria-current="page"]{background:#f9edf1;border-color:#e7c9d5}.quick-nav a:focus-visible{outline:3px solid #b86791;outline-offset:2px}@media(max-width:340px){.quick-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}</style>
     <script src="./analytics.js"></script>
     <script src="./config.js"></script>
     <script src="./app.js" defer></script>
@@ -116,16 +116,16 @@
         <span class="today-chip" id="today-chip">Hoje</span>
       </header>
 
-      <nav aria-label="Áreas do Diário da Fé" style="display:flex;gap:8px;margin:16px 0 22px;flex-wrap:wrap">
-        <a href="./ajuda.html" style="flex:1;min-width:95px;text-align:center;padding:14px;border-radius:14px;background:#f7e9e8;color:#762245;text-decoration:none;font-weight:750">❔ Conheça o App</a>
-        <a href="./" aria-current="page" style="flex:1;min-width:95px;text-align:center;padding:14px;border-radius:14px;background:#fffaf4;color:#762245;text-decoration:none;font-weight:750">♡ Devocional</a>
-        <a href="./biblia.html" style="flex:1;min-width:95px;text-align:center;padding:14px;border-radius:14px;background:#f7e9e8;color:#762245;text-decoration:none;font-weight:750">📖 Bíblia</a>
-        <a href="./jornadas.html" style="flex:1;min-width:95px;text-align:center;padding:14px;border-radius:14px;background:#f7e9e8;color:#762245;text-decoration:none;font-weight:750">🌷 Jornadas</a>
-        <a href="./oracoes.html" style="flex:1;min-width:95px;text-align:center;padding:14px;border-radius:14px;background:#f7e9e8;color:#762245;text-decoration:none;font-weight:750">🙏 Orações</a>
-        <a href="./caminhada.html" style="flex:1;min-width:95px;text-align:center;padding:14px;border-radius:14px;background:#f7e9e8;color:#762245;text-decoration:none;font-weight:750">📅 Minha Caminhada</a>
-        <a href="./desafios.html" style="flex:1;min-width:95px;text-align:center;padding:14px;border-radius:14px;background:#f7e9e8;color:#762245;text-decoration:none;font-weight:750">🎮 Desafios da Fé</a>
-        <a href="./jardim.html" style="flex:1;min-width:95px;text-align:center;padding:14px;border-radius:14px;background:#f7e9e8;color:#762245;text-decoration:none;font-weight:750">🌷 Meu Jardim Secreto</a>
-        <a href="./backup.html" style="flex:1;min-width:95px;text-align:center;padding:14px;border-radius:14px;background:#f7e9e8;color:#762245;text-decoration:none;font-weight:750">🔐 Minhas Memórias</a>
+      <nav class="quick-nav" aria-label="Áreas do Diário da Fé">
+        <a href="./ajuda.html">❔ Conheça o App</a>
+        <a href="./" aria-current="page">♡ Devocional</a>
+        <a href="./biblia.html">📖 Bíblia</a>
+        <a href="./jornadas.html">🌷 Jornadas</a>
+        <a href="./oracoes.html">🙏 Orações</a>
+        <a href="./caminhada.html">📅 Minha Caminhada</a>
+        <a href="./desafios.html">🎮 Desafios da Fé</a>
+        <a href="./jardim.html">🌳 Jardim Secreto</a>
+        <a href="./backup.html">🔐 Minhas Memórias</a>
       </nav>
 
       <section class="daily-card" aria-labelledby="devotional-title">
