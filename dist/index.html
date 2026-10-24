@@ -10,8 +10,8 @@
     <meta name="apple-mobile-web-app-title" content="Diário da Fé">
     <title>Diário da Fé Digital</title>
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="icon" href="./icons/icon-outubro-v2-192.png" type="image/png">
-    <link rel="apple-touch-icon" sizes="180x180" href="./icons/icon-outubro-v2-180.png">
+    <link rel="icon" href="./icons/icon-192.png" type="image/png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/logo-diario-da-fe.png">
     <link rel="stylesheet" href="./styles.css">
     <style>
       .brand-logo {
@@ -98,7 +98,7 @@
 
       .special-audio{margin:18px 0 22px;padding:20px;border:1px solid #e8c8cf;border-radius:20px;background:linear-gradient(145deg,#fff9f6,#f7e6ec)}.special-audio h2{margin:0 0 8px;color:#762245;font:700 23px Georgia,serif}.special-audio p{font-size:14px;color:#765f67;line-height:1.6}.special-audio audio{display:block;width:100%;margin:14px 0 5px}.special-audio .special-signature{font-weight:700;color:#762245}.special-audio[hidden]{display:none}
 .momento-com-deus{margin:20px 0;padding:19px;border:1px solid #e9cbd7;border-radius:18px;background:linear-gradient(135deg,#fffaf8,#f9e9f0)}.momento-com-deus h2,.momento-com-deus h3{margin:0 0 8px;color:#762245;font:700 22px Georgia,serif}.momento-com-deus p{line-height:1.7;color:#765f67;font-size:14px}.momento-com-deus button{background:#762245;color:white;border:0;border-radius:12px;padding:13px 16px;font-weight:750;cursor:pointer}.momento-com-deus [data-momento-panel]{padding-top:12px}.momento-com-deus [data-momento-panel][hidden]{display:none}.momento-com-deus [data-momento-step]{font-weight:800;color:#9b3b63}
-    .quick-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:14px 0 20px}.quick-nav a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 5px;border:1px solid #ebdce1;border-radius:10px;background:#fffaf9;color:#743c58;text-decoration:none;text-align:center;font:650 12px/1.25 system-ui,-apple-system,sans-serif;letter-spacing:-.1px}.quick-nav a[aria-current="page"]{background:#f9edf1;border-color:#e7c9d5}.quick-nav a:focus-visible{outline:3px solid #b86791;outline-offset:2px}@media(max-width:340px){.quick-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}</style>
+    .quick-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:14px 0 20px}.quick-nav a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 5px;border:1px solid #ebdce1;border-radius:10px;background:#fffaf9;color:#743c58;text-decoration:none;text-align:center;font:650 12px/1.25 system-ui,-apple-system,sans-serif;letter-spacing:-.1px}.quick-nav a[aria-current="page"]{background:#f9edf1;border-color:#e7c9d5}.quick-nav a:focus-visible{outline:3px solid #b86791;outline-offset:2px}@media(max-width:340px){.quick-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}.resume-journey{margin:10px 0 17px;padding:12px 14px;border:1px solid rgba(255,235,240,.3);background:rgba(255,255,255,.08);border-radius:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:13px}.resume-journey[hidden]{display:none}.resume-journey span{color:#f8e3e9;font-weight:650}.resume-journey a{color:#fff;text-decoration:underline;text-underline-offset:3px;font-weight:750;min-height:40px;display:inline-flex;align-items:center}</style>
     <script src="./analytics.js"></script>
     <script src="./config.js"></script>
     <script src="./app.js" defer></script>
@@ -128,6 +128,10 @@
         <a href="./backup.html">🔐 Minhas Memórias</a>
       </nav>
 
+      <section class="resume-journey" id="resume-journey" hidden aria-label="Continuar minha jornada">
+        <span>🌷 Sua caminhada continua</span>
+        <a href="./jornadas.html" id="resume-journey-link">Retomar minha última jornada →</a>
+      </section>
       <section class="daily-card" aria-labelledby="devotional-title">
         <div class="card-glow" aria-hidden="true"></div>
         <p class="date-label" id="date-label">Carregando a palavra de hoje…</p>
@@ -307,6 +311,7 @@
       });
     </script>
     <script src="./momento-com-deus.js" defer></script>
+    <script>try{var lastJourney=localStorage.getItem("diario-fe-last-journey-v1");if(lastJourney!==null&&/^\\d+$/.test(lastJourney)&&Number(lastJourney)<12){document.getElementById("resume-journey").hidden=false;document.getElementById("resume-journey-link").href="./jornadas.html?tema="+encodeURIComponent(lastJourney)}}catch(e){}</script>
     <noscript>Este aplicativo precisa do JavaScript ativado para mostrar o devocional diário.</noscript>
   </body>
 </html>
