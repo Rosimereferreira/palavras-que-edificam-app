@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "name": "Diário da Fé Digital",
   "short_name": "Diário da Fé",
-  "description": "Diário da Fé Digital — em outubro, devocionais especiais para mulheres, com fé, cuidado e fortalecimento da alma.",
+  "description": "Diário da Fé Digital — devocionais, Bíblia, jornadas, orações, reflexões e um jardim de gratidão para fortalecer a fé todos os dias.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
@@ -13,19 +13,19 @@
   "lang": "pt-BR",
   "icons": [
     {
-      "src": "./icons/icon-outubro-v2-192.png",
+      "src": "./icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-outubro-v2-512.png",
+      "src": "./icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-outubro-v2-maskable-512.png",
+      "src": "./icons/icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
