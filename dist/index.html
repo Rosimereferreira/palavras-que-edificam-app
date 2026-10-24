@@ -311,7 +311,7 @@
       });
     </script>
     <script src="./momento-com-deus.js" defer></script>
-    <script>try{var lastJourney=localStorage.getItem("diario-fe-last-journey-v1");if(lastJourney!==null&&/^\\d+$/.test(lastJourney)&&Number(lastJourney)<12){document.getElementById("resume-journey").hidden=false;document.getElementById("resume-journey-link").href="./jornadas.html?tema="+encodeURIComponent(lastJourney)}}catch(e){}</script>
+    <script>try{var lastJourney=localStorage.getItem("diario-fe-last-journey-v1");if(lastJourney!==null&&/^[0-9]+$/.test(lastJourney)&&Number(lastJourney)<12){document.getElementById("resume-journey").hidden=false;document.getElementById("resume-journey-link").href="./jornadas.html?tema="+encodeURIComponent(lastJourney)}}catch(e){}</script>
     <noscript>Este aplicativo precisa do JavaScript ativado para mostrar o devocional diário.</noscript>
   </body>
 </html>
