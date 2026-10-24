@@ -1,6 +1,6 @@
 "use strict";
 
-var CACHE_NAME = "diario-da-fe-digital-v42";
+var CACHE_NAME = "diario-da-fe-digital-v43";
 var APP_FILES = [
   "./",
   "./index.html",
@@ -53,7 +53,7 @@ self.addEventListener("activate", function (event) {
   event.waitUntil(
     caches.keys().then(function (keys) {
       return Promise.all(keys.map(function (key) {
-        return key === CACHE_NAME ? Promise.resolve() : caches.delete(key);
+        return key === CACHE_NAME || key.indexOf("diario-da-fe-digital-v") !== 0 ? Promise.resolve() : caches.delete(key);
       }));
     }).then(function () {
       return self.clients.claim();
@@ -65,6 +65,7 @@ self.addEventListener("fetch", function (event) {
   if (event.request.method !== "GET") return;
 
   var requestUrl = new URL(event.request.url);
+  if (requestUrl.origin !== self.location.origin || !requestUrl.pathname.startsWith(new URL(self.registration.scope).pathname)) return;
   var preferNetwork = event.request.mode === "navigate" ||
     requestUrl.pathname.endsWith("/config.js") ||
     requestUrl.pathname.endsWith("/annual-devotional.js") ||
@@ -81,7 +82,7 @@ self.addEventListener("fetch", function (event) {
         }
         return response;
       }).catch(function () {
-        return caches.match(event.request).then(function (cached) {
+        return caches.match(event.request,{ignoreSearch:true}).then(function (cached) {
           return cached || caches.match("./index.html");
         });
       })
@@ -90,7 +91,7 @@ self.addEventListener("fetch", function (event) {
   }
 
   event.respondWith(
-    caches.match(event.request).then(function (cached) {
+    caches.match(event.request,{ignoreSearch:true}).then(function (cached) {
       var network = fetch(event.request).then(function (response) {
         if (response && response.ok && response.type === "basic") {
           var copy = response.clone();
