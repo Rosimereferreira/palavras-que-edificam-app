@@ -49,7 +49,7 @@ button {
   width: min(100%, 760px);
   min-height: 100vh;
   margin: 0 auto;
-  padding: max(18px, env(safe-area-inset-top)) 18px max(30px, env(safe-area-inset-bottom));
+  padding: calc(22px + env(safe-area-inset-top, 0px)) 18px calc(30px + env(safe-area-inset-bottom, 0px));
 }
 
 .topbar {
@@ -898,3 +898,4 @@ body.october-rosa .primary-button { border-color: #ffd7e4; background: #ffdce7; 
 .story-dialog-actions .story-save { border-color: #d5a1b6; background: #fff7fa; color: #793250; }
 .story-dialog .story-help { margin-bottom: 0; font-size: .77rem; }
 @media(max-width:380px) { .faith-progress { padding: 16px; } .faith-progress-actions { grid-template-columns: 1fr; } .streak-badge { max-width: 94px; font-size: .69rem; } }
+\n/* Alvos de toque e navegação acessível em telas pequenas */\na:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid #f0bdce; outline-offset: 3px; }\n
