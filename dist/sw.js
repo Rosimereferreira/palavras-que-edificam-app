@@ -1,6 +1,6 @@
 "use strict";
 
-var CACHE_NAME = "diario-da-fe-digital-v50";
+var CACHE_NAME = "diario-da-fe-digital-v51";
 var APP_FILES = [
   "./",
   "./index.html",
@@ -39,13 +39,22 @@ var APP_FILES = [
   "./icons/icon-maskable-512.png"
 ];
 
+// A falha de um ícone ou arquivo opcional não impede a instalação offline.
 self.addEventListener("install", function (event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function (cache) {
-      return cache.addAll(APP_FILES);
-    }).then(function () {
-      return self.skipWaiting();
-    })
+      var essentials = ["./", "./index.html", "./styles.css", "./app.js",
+        "./biblia.html", "./jornadas.html", "./oracoes.html", "./jardim.html",
+        "./jardim.js", "./backup.html", "./backup.js", "./caminhada.html",
+        "./desafios.html", "./compartilhar.html", "./ajuda.html"];
+      return cache.addAll(essentials).then(function () {
+        return Promise.all(APP_FILES.filter(function (url) {
+          return essentials.indexOf(url) === -1;
+        }).map(function (url) {
+          return cache.add(url).catch(function () { return null; });
+        }));
+      });
+    }).then(function () { return self.skipWaiting(); })
   );
 });
 
@@ -83,7 +92,14 @@ self.addEventListener("fetch", function (event) {
         return response;
       }).catch(function () {
         return caches.match(event.request,{ignoreSearch:true}).then(function (cached) {
-          return cached || caches.match("./index.html");
+          if (cached) return cached;
+          if (requestUrl.pathname === new URL("./", self.registration.scope).pathname ||
+              requestUrl.pathname.endsWith("/index.html")) {
+            return caches.match("./index.html");
+          }
+          return new Response("<!doctype html><html lang='pt-BR'><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Sem conexão</title><main style='font:16px system-ui;padding:30px;line-height:1.6'><h1>🌷 Você está sem internet</h1><p>Esta página ainda não foi salva para uso offline. Conecte-se e tente novamente.</p><a href='./'>Voltar ao Diário da Fé</a></main></html>", {
+            status: 503, headers: {"Content-Type": "text/html; charset=utf-8"}
+          });
         });
       })
     );
