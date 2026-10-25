@@ -1,6 +1,6 @@
 "use strict";
 
-var CACHE_NAME = "diario-da-fe-digital-v53";
+var CACHE_NAME = "diario-da-fe-digital-v54";
 var APP_FILES = [
   "./",
   "./index.html",
@@ -87,7 +87,9 @@ self.addEventListener("fetch", function (event) {
       fetch(event.request).then(function (response) {
         if (response && response.ok) {
           var copy = response.clone();
-          caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, copy); });
+          event.waitUntil(caches.open(CACHE_NAME).then(function (cache) {
+            return cache.put(event.request, copy);
+          }).catch(function () { /* Sem espaço para cache: manter a navegação online. */ }));
         }
         return response;
       }).catch(function () {
@@ -111,11 +113,12 @@ self.addEventListener("fetch", function (event) {
       var network = fetch(event.request).then(function (response) {
         if (response && response.ok && response.type === "basic") {
           var copy = response.clone();
-          caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, copy); });
+          event.waitUntil(caches.open(CACHE_NAME).then(function (cache) {
+            return cache.put(event.request, copy);
+          }).catch(function () { /* Sem espaço para cache: manter a navegação online. */ }));
         }
         return response;
       }).catch(function () {
-        if (event.request.mode === "navigate") return caches.match("./index.html");
         return cached;
       });
       return cached || network;
