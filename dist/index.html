@@ -97,7 +97,7 @@
       .audio-player{margin:20px 0;padding:18px;border:1px solid #e9cbd7;border-radius:18px;background:linear-gradient(135deg,#fffaf8,#f9e9f0)}.audio-player h2{margin:0 0 5px;color:#762245;font:700 22px Georgia,serif}.audio-player p{color:#765f67;font-size:13px;line-height:1.55}.audio-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.audio-actions button{border:0;border-radius:12px;background:#762245;color:#fff;padding:12px 14px;font:700 13px system-ui;cursor:pointer}.audio-actions button.audio-secondary{background:#f2dce6;color:#762245}.audio-actions button:disabled{opacity:.45;cursor:not-allowed}.audio-actions select{border:1px solid #dcb4c6;background:white;color:#762245;border-radius:10px;padding:11px;font:700 13px system-ui}.audio-player [role=status]{margin:9px 0 0;min-height:18px}
 
       .special-audio{margin:18px 0 22px;padding:20px;border:1px solid #e8c8cf;border-radius:20px;background:linear-gradient(145deg,#fff9f6,#f7e6ec)}.special-audio h2{margin:0 0 8px;color:#762245;font:700 23px Georgia,serif}.special-audio p{font-size:14px;color:#765f67;line-height:1.6}.special-audio audio{display:block;width:100%;margin:14px 0 5px}.special-audio .special-signature{font-weight:700;color:#762245}.special-audio[hidden]{display:none}
-.momento-com-deus{margin:20px 0;padding:19px;border:1px solid #e9cbd7;border-radius:18px;background:linear-gradient(135deg,#fffaf8,#f9e9f0)}.momento-com-deus h2,.momento-com-deus h3{margin:0 0 8px;color:#762245;font:700 22px Georgia,serif}.momento-com-deus p{line-height:1.7;color:#765f67;font-size:14px}.momento-com-deus button{background:#762245;color:white;border:0;border-radius:12px;padding:13px 16px;font-weight:750;cursor:pointer}.momento-com-deus [data-momento-panel]{padding-top:12px}.momento-com-deus [data-momento-panel][hidden]{display:none}.momento-com-deus [data-momento-step]{font-weight:800;color:#9b3b63}
+
     .quick-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:14px 0 20px}.quick-nav a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 5px;border:1px solid #ebdce1;border-radius:10px;background:#fffaf9;color:#743c58;text-decoration:none;text-align:center;font:650 12px/1.25 system-ui,-apple-system,sans-serif;letter-spacing:-.1px}.quick-nav a[aria-current="page"]{background:#f9edf1;border-color:#e7c9d5}.quick-nav a:focus-visible{outline:3px solid #b86791;outline-offset:2px}@media(max-width:340px){.quick-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}.resume-journey{margin:10px 0 17px;padding:12px 14px;border:1px solid rgba(255,235,240,.3);background:rgba(255,255,255,.08);border-radius:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:13px}.resume-journey[hidden]{display:none}.resume-journey span{color:#f8e3e9;font-weight:650}.resume-journey a{color:#fff;text-decoration:underline;text-underline-offset:3px;font-weight:750;min-height:40px;display:inline-flex;align-items:center}</style>
     <script src="./analytics.js"></script>
     <script src="./config.js"></script>
@@ -164,12 +164,7 @@
           }).catch(function(){});
         })();
         </script>
-        <section class="momento-com-deus" id="momento-com-deus" data-momento-title="devotional-title" data-momento-verse="verse-text" data-momento-prayer="prayer-text" data-momento-watch="devotional-title" aria-label="Momento com Deus">
- <h2>🙏 Meu momento com Deus</h2>
- <p>Separe alguns instantes para meditar, aquietar o coração e conversar com Deus. Sem pressa e sem cobrança.</p>
- <button type="button" data-momento-start>🌿 Começar meu momento</button>
- <div data-momento-panel hidden><p data-momento-step aria-live="polite"></p><h3 data-momento-heading></h3><p data-momento-body></p><button type="button" data-momento-next>Continuar →</button></div>
- </section>
+        
         <div class="devotional-body">
           <section>
             <h2>Reflexão</h2>
@@ -310,7 +305,7 @@
         window.location.href = './compartilhar.html?' + params.toString();
       });
     </script>
-    <script src="./momento-com-deus.js" defer></script>
+    
     <script>try{var lastJourney=localStorage.getItem("diario-fe-last-journey-v1");if(lastJourney!==null&&/^[0-9]+$/.test(lastJourney)&&Number(lastJourney)<12){document.getElementById("resume-journey").hidden=false;document.getElementById("resume-journey-link").href="./jornadas.html?tema="+encodeURIComponent(lastJourney)}}catch(e){}</script>
     <noscript>Este aplicativo precisa do JavaScript ativado para mostrar o devocional diário.</noscript>
   </body>
