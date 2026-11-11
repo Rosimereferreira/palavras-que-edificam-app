@@ -438,7 +438,7 @@
   function devotionalSections(devotional) {
     var reflection = devotional.reflexao || "";
     var learning = devotional.aprendo || "";
-    var match = /\\bO que aprendemos com isso\\?\\s*/i.exec(reflection);
+    var match = /\bO que aprendemos com isso\?\s*/i.exec(reflection);
     if (match) {
       var extracted = reflection.slice(match.index + match[0].length).trim();
       reflection = reflection.slice(0, match.index).trim();
