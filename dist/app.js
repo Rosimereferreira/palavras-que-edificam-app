@@ -434,6 +434,20 @@
     } catch (error) {}
   }
 
+  // Separa o ensinamento da reflexão, inclusive nas palavras já salvas no aparelho.
+  function devotionalSections(devotional) {
+    var reflection = devotional.reflexao || "";
+    var learning = devotional.aprendo || "";
+    var match = /\\bO que aprendemos com isso\\?\\s*/i.exec(reflection);
+    if (match) {
+      var extracted = reflection.slice(match.index + match[0].length).trim();
+      reflection = reflection.slice(0, match.index).trim();
+      // O aprendizado específico da própria Palavra tem prioridade sobre frases genéricas.
+      if (extracted) learning = extracted;
+    }
+    return { reflection: reflection, learning: learning || "A Palavra nos chama a responder com fé, verdade e uma decisão prática." };
+  }
+
   function showLastDevotional() {
     try {
       var raw = window.localStorage.getItem(LAST_DEVOTIONAL_KEY);
@@ -450,9 +464,10 @@
       byId("impact-phrase").textContent = devotional.frase || "";
       byId("verse-text").textContent = devotional.versiculo || "";
       byId("verse-reference").textContent = devotional.referencia || "";
-      byId("reflection-text").textContent = devotional.reflexao || "";
+      var sections = devotionalSections(devotional);
+      byId("reflection-text").textContent = sections.reflection;
       var learning = byId("learning-text");
-      if (learning) learning.textContent = devotional.aprendo || "";
+      if (learning) learning.textContent = sections.learning;
       byId("prayer-text").textContent = devotional.oracao || "";
       byId("daily-action").textContent = devotional.tarefa || "";
       var pearl = byId("pearl-text");
@@ -478,9 +493,10 @@
     byId("impact-phrase").textContent = devotional.frase;
     byId("verse-text").textContent = devotional.versiculo;
     byId("verse-reference").textContent = devotional.referencia;
-    byId("reflection-text").textContent = devotional.reflexao;
+    var sections = devotionalSections(devotional);
+    byId("reflection-text").textContent = sections.reflection;
     var learning = byId("learning-text");
-    if (learning) learning.textContent = devotional.aprendo || "A Palavra nos chama a responder com fé, verdade e uma decisão prática.";
+    if (learning) learning.textContent = sections.learning;
     byId("prayer-text").textContent = devotional.oracao;
     byId("daily-action").textContent = devotional.tarefa;
     var pearl = byId("pearl-text");
