@@ -98,7 +98,23 @@
 
       .special-audio{margin:18px 0 22px;padding:20px;border:1px solid #e8c8cf;border-radius:20px;background:linear-gradient(145deg,#fff9f6,#f7e6ec)}.special-audio h2{margin:0 0 8px;color:#762245;font:700 23px Georgia,serif}.special-audio p{font-size:14px;color:#765f67;line-height:1.6}.special-audio audio{display:block;width:100%;margin:14px 0 5px}.special-audio .special-signature{font-weight:700;color:#762245}.special-audio[hidden]{display:none}
 
-    .quick-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:14px 0 20px}.quick-nav a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 5px;border:1px solid #ebdce1;border-radius:10px;background:#fffaf9;color:#743c58;text-decoration:none;text-align:center;font:650 12px/1.25 system-ui,-apple-system,sans-serif;letter-spacing:-.1px}.quick-nav a[aria-current="page"]{background:#f9edf1;border-color:#e7c9d5}.quick-nav a:focus-visible{outline:3px solid #b86791;outline-offset:2px}@media(max-width:340px){.quick-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}.resume-journey{margin:10px 0 17px;padding:12px 14px;border:1px solid rgba(255,235,240,.3);background:rgba(255,255,255,.08);border-radius:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:13px}.resume-journey[hidden]{display:none}.resume-journey span{color:#f8e3e9;font-weight:650}.resume-journey a{color:#fff;text-decoration:underline;text-underline-offset:3px;font-weight:750;min-height:40px;display:inline-flex;align-items:center}</style>
+    .quick-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:14px 0 20px}.quick-nav a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 5px;border:1px solid #ebdce1;border-radius:10px;background:#fffaf9;color:#743c58;text-decoration:none;text-align:center;font:650 12px/1.25 system-ui,-apple-system,sans-serif;letter-spacing:-.1px}.quick-nav a[aria-current="page"]{background:#f9edf1;border-color:#e7c9d5}.quick-nav a:focus-visible{outline:3px solid #b86791;outline-offset:2px}@media(max-width:340px){.quick-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}.resume-journey{margin:10px 0 17px;padding:12px 14px;border:1px solid rgba(255,235,240,.3);background:rgba(255,255,255,.08);border-radius:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:13px}.resume-journey[hidden]{display:none}.resume-journey span{color:#f8e3e9;font-weight:650}.resume-journey a{color:#fff;text-decoration:underline;text-underline-offset:3px;font-weight:750;min-height:40px;display:inline-flex;align-items:center}
+    /* Início com foco na Palavra: menu discreto, fechado por padrão. */
+    .home-navigation{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0 18px;position:relative;z-index:4}
+    .today-devotional-link{display:inline-flex;align-items:center;gap:9px;min-height:48px;padding:10px 14px;border:1px solid rgba(255,241,224,.42);border-radius:14px;background:rgba(255,255,255,.13);color:#fff9ef;text-decoration:none;font:750 clamp(13px,3.7vw,16px)/1.25 system-ui,-apple-system,sans-serif;box-shadow:0 4px 16px rgba(31,5,17,.12)}
+    .today-devotional-link span{font-size:18px;color:#f1d7a7}
+    .app-menu{position:relative;flex:none}
+    .app-menu summary{list-style:none;display:flex;align-items:center;justify-content:center;gap:7px;min-height:46px;padding:10px 13px;border:1px solid rgba(255,250,244,.4);border-radius:13px;color:#fff8ed;background:rgba(255,255,255,.09);font:700 13px system-ui,-apple-system,sans-serif;cursor:pointer}
+    .app-menu summary::-webkit-details-marker{display:none}
+    .app-menu summary span{font-size:17px}
+    .app-menu[open] summary{background:#fffaf4;color:#64223c;border-color:#fffaf4}
+    .app-menu .quick-nav{position:absolute;right:0;top:calc(100% + 9px);width:min(310px,calc(100vw - 34px));max-height:min(66dvh,570px);overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0;padding:13px;border:1px solid #e8c8cf;border-radius:17px;background:#fffaf6;box-shadow:0 16px 38px rgba(31,5,17,.28)}
+    .app-menu .quick-nav a{min-height:53px;padding:10px 7px;border-radius:11px;background:#fff;color:#6b2946;font-size:12px}
+    .app-menu .resume-journey:not([hidden]){position:absolute;right:0;top:calc(100% + min(66dvh,570px) + 16px);width:min(310px,calc(100vw - 34px));margin:0;padding:12px;background:#5b1634;box-shadow:0 10px 25px rgba(31,5,17,.25)}
+    .app-menu .resume-journey a{font-size:12px}
+    @media(max-width:360px){.today-devotional-link{padding:9px;font-size:12px}.app-menu summary{padding:9px}}
+    .home-navigation a:focus-visible,.app-menu summary:focus-visible{outline:3px solid #f2d8ac;outline-offset:3px}
+</style>
     <script src="./analytics.js"></script>
     <script src="./config.js"></script>
     <script src="./app.js?v=58" defer></script>
@@ -116,22 +132,26 @@
         <span class="today-chip" id="today-chip">Hoje</span>
       </header>
 
-      <nav class="quick-nav" aria-label="Áreas do Diário da Fé">
-        <a href="./ajuda.html">❔ Conheça o App</a>
-        <a href="./" aria-current="page">♡ Devocional</a>
-        <a href="./biblia.html">📖 Bíblia</a>
-        <a href="./jornadas.html">🌷 Jornadas</a>
-        <a href="./oracoes.html">🙏 Orações</a>
-        <a href="./caminhada.html">📅 Minha Caminhada</a>
-        <a href="./desafios.html">🎮 Desafios da Fé</a>
-        <a href="./jardim.html">🌳 Jardim Secreto</a>
-        <a href="./backup.html">🔐 Minhas Memórias</a>
-      </nav>
-
-      <section class="resume-journey" id="resume-journey" hidden aria-label="Continuar minha jornada">
-        <span>🌷 Sua caminhada continua</span>
-        <a href="./jornadas.html" id="resume-journey-link">Retomar minha última jornada →</a>
-      </section>
+      <div class="home-navigation">
+        <a class="today-devotional-link" href="#devotional-title" aria-label="Ir para o devocional de hoje">📖 Devocional de hoje <span aria-hidden="true">↓</span></a>
+        <details class="app-menu" id="app-menu">
+          <summary aria-label="Abrir ou fechar menu de áreas do aplicativo"><span aria-hidden="true">☰</span> Menu</summary>
+          <nav class="quick-nav" aria-label="Outras áreas do Diário da Fé">
+            <a href="./ajuda.html">❔ Conheça o App</a>
+            <a href="./biblia.html">📖 Bíblia</a>
+            <a href="./jornadas.html">🌷 Jornadas</a>
+            <a href="./oracoes.html">🙏 Orações</a>
+            <a href="./caminhada.html">📅 Minha Caminhada</a>
+            <a href="./desafios.html">🎮 Desafios da Fé</a>
+            <a href="./jardim.html">🌳 Jardim Secreto</a>
+            <a href="./backup.html">🔐 Minhas Memórias</a>
+          </nav>
+          <section class="resume-journey" id="resume-journey" hidden aria-label="Continuar minha jornada">
+            <span>🌷 Sua caminhada continua</span>
+            <a href="./jornadas.html" id="resume-journey-link">Retomar minha última jornada →</a>
+          </section>
+        </details>
+      </div>
       <section class="daily-card" aria-labelledby="devotional-title">
         <div class="card-glow" aria-hidden="true"></div>
         <p class="date-label" id="date-label">Carregando a palavra de hoje…</p>
