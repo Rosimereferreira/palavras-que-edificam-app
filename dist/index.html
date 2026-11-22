@@ -114,10 +114,25 @@
     .app-menu .resume-journey a{font-size:12px}
     @media(max-width:360px){.today-devotional-link{padding:9px;font-size:12px}.app-menu summary{padding:9px}}
     .home-navigation a:focus-visible,.app-menu summary:focus-visible{outline:3px solid #f2d8ac;outline-offset:3px}
+
+      /* Natal: visual claro, vermelho suave e estrela sobre a manjedoura. Ativo apenas em dezembro de 2026. */
+      body.christmas-theme{background:radial-gradient(circle at 50% 8%,rgba(255,255,255,.94),transparent 30rem),linear-gradient(160deg,#fffdf8 0%,#fbe7e2 48%,#e9b6b0 100%);color:#6d2030}
+      .christmas-theme .topbar .brand{color:#742637}
+      .christmas-theme .topbar .brand small{color:#85545b}
+      .christmas-theme .today-chip{color:#a52c3c;border-color:#d5a8a6;background:#fff9f6}
+      .christmas-theme .today-devotional-link{background:#9e293d;border-color:#9e293d;color:white}
+      .christmas-theme .app-menu summary{background:#fff9f6;color:#922b40;border-color:#e7bfc1}
+      .christmas-theme .daily-card{border:1px solid #efcbc9;box-shadow:0 20px 45px rgba(117,38,49,.14)}
+      .christmas-theme .home-navigation{margin-bottom:16px}
+      .christmas-theme .nativity-banner{display:block}
+      .nativity-banner{display:none;text-align:center;margin:0 0 18px;padding:12px 16px 14px;border:1px solid #e9c6bd;border-radius:18px;background:linear-gradient(125deg,#fffefb,#fff1eb);color:#8d293c;box-shadow:0 6px 20px rgba(117,38,49,.06)}
+      .nativity-banner .nativity-symbol{font:normal 27px/1.2 Georgia,serif;color:#b48a43;letter-spacing:6px}
+      .nativity-banner strong{display:block;margin:5px 0;font:700 18px Georgia,serif}
+      .nativity-banner span{display:block;font:500 12px/1.5 system-ui,-apple-system,sans-serif;color:#8a5a5e}
 </style>
     <script src="./analytics.js"></script>
     <script src="./config.js"></script>
-    <script src="./app.js?v=58" defer></script>
+    <script src="./app.js?v=61" defer></script>
   </head>
   <body>
     <main class="app-shell">
@@ -152,6 +167,7 @@
           </nav>
         </details>
       </div>
+      <aside class="nativity-banner" aria-label="Mensagem especial de Natal"><div class="nativity-symbol" aria-hidden="true">✦ ✧ ✦</div><strong>O Salvador nasceu</strong><span>A luz de Belém nos lembra do amor e da esperança que encontramos em Jesus.</span></aside>
       <section class="daily-card" aria-labelledby="devotional-title">
         <div class="card-glow" aria-hidden="true"></div>
         <p class="date-label" id="date-label">Carregando a palavra de hoje…</p>
