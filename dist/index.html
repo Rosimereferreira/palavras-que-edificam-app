@@ -110,7 +110,7 @@
     .app-menu[open] summary{background:#fffaf4;color:#64223c;border-color:#fffaf4}
     .app-menu .quick-nav{position:absolute;right:0;top:calc(100% + 9px);width:min(310px,calc(100vw - 34px));max-height:min(66dvh,570px);overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0;padding:13px;border:1px solid #e8c8cf;border-radius:17px;background:#fffaf6;box-shadow:0 16px 38px rgba(31,5,17,.28)}
     .app-menu .quick-nav a{min-height:53px;padding:10px 7px;border-radius:11px;background:#fff;color:#6b2946;font-size:12px}
-    .app-menu .resume-journey:not([hidden]){position:absolute;right:0;top:calc(100% + min(66dvh,570px) + 16px);width:min(310px,calc(100vw - 34px));margin:0;padding:12px;background:#5b1634;box-shadow:0 10px 25px rgba(31,5,17,.25)}
+    .app-menu .resume-journey:not([hidden]){position:static;grid-column:1/-1;width:auto;margin:0;padding:12px;background:#5b1634;box-shadow:none}
     .app-menu .resume-journey a{font-size:12px}
     @media(max-width:360px){.today-devotional-link{padding:9px;font-size:12px}.app-menu summary{padding:9px}}
     .home-navigation a:focus-visible,.app-menu summary:focus-visible{outline:3px solid #f2d8ac;outline-offset:3px}
@@ -145,11 +145,11 @@
             <a href="./desafios.html">🎮 Desafios da Fé</a>
             <a href="./jardim.html">🌳 Jardim Secreto</a>
             <a href="./backup.html">🔐 Minhas Memórias</a>
+            <div class="resume-journey" id="resume-journey" hidden aria-label="Continuar minha jornada">
+              <span>🌷 Sua caminhada continua</span>
+              <a href="./jornadas.html" id="resume-journey-link">Retomar minha última jornada →</a>
+            </div>
           </nav>
-          <section class="resume-journey" id="resume-journey" hidden aria-label="Continuar minha jornada">
-            <span>🌷 Sua caminhada continua</span>
-            <a href="./jornadas.html" id="resume-journey-link">Retomar minha última jornada →</a>
-          </section>
         </details>
       </div>
       <section class="daily-card" aria-labelledby="devotional-title">
