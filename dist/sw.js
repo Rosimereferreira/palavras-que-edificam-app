@@ -1,6 +1,6 @@
 "use strict";
 
-var CACHE_NAME = "diario-da-fe-digital-v60";
+var CACHE_NAME = "diario-da-fe-digital-v61";
 var APP_FILES = [
   "./",
   "./index.html",
@@ -22,6 +22,7 @@ var APP_FILES = [
   "./config.js",
   "./devocionais.json",
   "./outubro-mulheres.json",
+  "./dezembro-natal-2026.json",
   "./series-1.json",
   "./series-2.json",
   "./series-3.json",

@@ -6,6 +6,7 @@
   var SERIES_START_UTC = Date.UTC(2026, 8, 15);
   var SERIES_FILES = ["./series-1.json", "./series-2.json", "./series-3.json", "./series-4.json"];
   var OCTOBER_DEVOTIONALS_FILE = "./outubro-mulheres.json";
+  var DECEMBER_DEVOTIONALS_FILE = "./dezembro-natal-2026.json";
   var state = { devotionals: [], series: [], octoberDevotionals: [], current: null, renderedDateKey: null, deferredInstall: null, oneSignal: null, toastTimer: null };
   var LAST_DEVOTIONAL_KEY = "diario-fe-last-devotional-v1";
   var READS_KEY = "diario-fe-read-history-v1";
@@ -40,6 +41,8 @@
     formatter.formatToParts(date).forEach(function (part) { if (part.type !== "literal") values[part.type] = Number(part.value); });
     return { year: values.year, month: values.month, day: values.day };
   }
+  function isDecember2026(date) { var p = datePartsInZone(date); return p.year === 2026 && p.month === 12; }
+  function applyDecemberTheme() { var active = isDecember2026(new Date()); document.body.classList.toggle("christmas-theme", active); var chip = byId("today-chip"); if (chip && active) chip.textContent = "Natal"; }
   function isOctoberWomenMonth(date) { var p = datePartsInZone(date); return p.year === 2026 && p.month === 10; }
   function applyOctoberTheme() {
     var active = isOctoberWomenMonth(new Date());
@@ -533,6 +536,15 @@
     var hasSavedDevotional = showLastDevotional();
     try {
       applyOctoberTheme();
+      applyDecemberTheme();
+      if (isDecember2026(new Date())) {
+        var christmasResponse = await fetch(DECEMBER_DEVOTIONALS_FILE, { cache: "no-store" });
+        if (!christmasResponse.ok) throw new Error("Não foi possível carregar os devocionais de Natal.");
+        var christmasDays = await christmasResponse.json();
+        if (!Array.isArray(christmasDays) || christmasDays.length !== 31) throw new Error("Devocionais de dezembro incompletos.");
+        renderDevotional(christmasDays[datePartsInZone(new Date()).day - 1]);
+        return;
+      }
       if (isOctoberWomenMonth(new Date()) && state.octoberDevotionals.length !== 31) {
         var octoberResponse = await fetch(OCTOBER_DEVOTIONALS_FILE, { cache: "no-store" });
         if (!octoberResponse.ok) throw new Error("Não foi possível carregar o especial de outubro.");
@@ -793,11 +805,12 @@
     window.addEventListener("beforeinstallprompt", function (event) { event.preventDefault(); state.deferredInstall = event; });
     window.addEventListener("appinstalled", function () { state.deferredInstall = null; track("app_installed", { ios: isIOS() }); updateInstallButton(); showToast("Aplicativo instalado com sucesso."); });
   }
-  function watchDayChange() { window.setInterval(function () { var currentKey = dateKey(new Date()); if (state.renderedDateKey && currentKey !== state.renderedDateKey) { document.body.classList.toggle("october-theme", isOctoberSpecial(new Date())); loadDevotional(); } }, 60000); }
+  function watchDayChange() { window.setInterval(function () { var currentKey = dateKey(new Date()); if (state.renderedDateKey && currentKey !== state.renderedDateKey) { document.body.classList.toggle("october-theme", isOctoberSpecial(new Date())); applyDecemberTheme(); loadDevotional(); } }, 60000); }
   function registerOfflineWorker() { if ("serviceWorker" in navigator) window.addEventListener("load", function () { navigator.serviceWorker.register("./sw.js").catch(function () {}); }); }
 
   document.body.classList.toggle("october-theme", isOctoberSpecial(new Date()));
   applyOctoberTheme();
+  applyDecemberTheme();
   injectFaithInterface();
   updateFaithUI();
   loadDevotional();
